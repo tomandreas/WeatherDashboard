@@ -1,0 +1,18 @@
+{
+ "files": {
+  "index.html": {
+   "current": 1,
+   "versions": [
+    {
+     "v": 1,
+     "label": "1.1",
+     "file": "index.v1.html",
+     "archived": "2026-10-21",
+     "note": "First release: TAF Timeline v1.25 (left, 66 %) and LOOME Night Ops v1.7 (right, 34 %) merged into one page, each scoped to its own pane; tabs below 1100 px; installable and offline; WeatherDashboard icon.",
+     "bytes": 4421437,
+     "sha": "43621f2f6c7a0e383873fd4ad15fc6437bde2c72f071f2e42282865abf85051a"
+    }
+   ]
+  }
+ }
+}
