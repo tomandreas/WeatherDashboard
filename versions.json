@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 3,
+   "current": 4,
    "versions": [
     {
      "v": 1,
@@ -29,6 +29,15 @@
      "note": "Top bar with a light/dark switch (opens in dark, remembers the choice); high-legibility light theme for both sides; TAF airport cards always one per row. TAF v1.25 and LOOME v1.8 unchanged.",
      "bytes": 4433346,
      "sha": "bb0cff74988d2f91638943ab5dc5ab2ba826a9dfc97c728b2430182120255266"
+    },
+    {
+     "v": 4,
+     "label": "1.4",
+     "file": "index.v4.html",
+     "archived": "2026-10-25",
+     "note": "New Vessels section (v1.0): search the curated vessel list by name or MMSI, view photos from the ais-photos repo, and upload new photos (resized on the device, credit required, shared upload code) via /api/vessel-photo. Own tab below 1100 px, below the TAF timeline on wide screens. TAF v1.25 and LOOME v1.8 unchanged.",
+     "bytes": 4448824,
+     "sha": "2e4cfb1b1970f7a4fe9176bb4eea3830ae5f7729915bebf662b4fe74733cca54"
     }
    ]
   }

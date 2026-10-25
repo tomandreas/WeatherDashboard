@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.3">
+<meta name="page-version" content="1.4">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -68,6 +68,53 @@ html[data-wd-theme=light] #taf-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2
 html[data-wd-theme=light] #taf-root .btn.primary{background:#e8a020;border-color:#e8a020;color:#14100a}
 html[data-wd-theme=light] #taf-root .warn{color:#6e4400;border-color:#e0c27a;background:#fdf3dc}
 html[data-wd-theme=light] #taf-root .warn.bad{color:#8e1c1c;border-color:#e9a7a7;background:#fbe5e5}
+/* Vessels v1.0 (ais-photos search and upload) */
+#pane-ves{display:none}
+#ves-root{padding:14px 14px 4px;max-width:900px;margin:0 auto;box-sizing:border-box;color:#d7dde8}
+#scroll-taf #ves-root{border-top:1px solid #1d2432;margin-top:8px}
+.ves-docked #taf-root{min-height:0}
+#ves-root h2{font:22px/1 'LN Display','Bebas Neue','Arial Narrow',Impact,sans-serif;letter-spacing:.05em;margin:4px 0 10px;font-weight:400}
+#ves-root h2 b{font-weight:400;color:#e8a020}
+#ves-root .vs-stat{color:#7d8799;font-size:12px;margin:-4px 0 10px}
+#ves-root input[type=search],#ves-root input[type=text],#ves-root input[type=password]{width:100%;box-sizing:border-box;background:#121722;border:1px solid #2a3242;border-radius:8px;color:#d7dde8;font:16px/1.3 'LN Mono','IBM Plex Mono',ui-monospace,monospace;padding:10px 12px;outline:none}
+#ves-root input:focus{border-color:#4ea8de}
+#ves-root .vs-list{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+#ves-root .vs-item{background:#121722;border:1px solid #1d2432;border-radius:10px}
+#ves-root .vs-head{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;user-select:none}
+#ves-root .vs-name{flex:1;font-weight:600;letter-spacing:.02em}
+#ves-root .vs-mmsi{color:#7d8799;font-size:12px;font-variant-numeric:tabular-nums}
+#ves-root .vs-badge{font-size:11px;padding:2px 7px;border-radius:10px;border:1px solid #2a3242;color:#7d8799;white-space:nowrap}
+#ves-root .vs-badge.on{border-color:#4ea8de;color:#4ea8de}
+#ves-root .vs-body{padding:0 12px 12px}
+#ves-root .vs-ph{margin:0 0 10px}
+#ves-root .vs-ph img{width:100%;height:auto;display:block;border-radius:6px;background:#0b0e14}
+#ves-root .vs-ph figcaption{color:#7d8799;font-size:11px;margin-top:3px}
+#ves-root .vs-none{color:#7d8799;font-size:12px;margin:2px 0 10px}
+#ves-root .vs-btn{border:1px solid #e8a020;background:#e8a020;color:#14100a;border-radius:8px;font:600 13px/1 'LN Mono','IBM Plex Mono',ui-monospace,monospace;padding:10px 14px;cursor:pointer}
+#ves-root .vs-btn.ghost{background:transparent;color:#e8a020}
+#ves-root .vs-btn:disabled{opacity:.5;cursor:default}
+#ves-root .vs-form{display:flex;flex-direction:column;gap:8px;margin-top:6px;padding-top:10px;border-top:1px solid #1d2432}
+#ves-root .vs-form label{font-size:12px;color:#7d8799;display:flex;flex-direction:column;gap:4px}
+#ves-root .vs-form label.chk{flex-direction:row;align-items:flex-start;gap:8px;color:#d7dde8}
+#ves-root .vs-form input[type=checkbox]{width:18px;height:18px;margin:1px 0 0;accent-color:#e8a020}
+#ves-root .vs-form input[type=file]{color:#d7dde8;font-size:13px}
+#ves-root .vs-msg{font-size:12px;min-height:1em}
+#ves-root .vs-msg.ok{color:#5fbf7a}#ves-root .vs-msg.bad{color:#e05a5a}
+#ves-root .vs-hint{color:#566074;font-size:11px;margin:10px 0 0;text-align:center}
+@media (max-width:1099px){
+  .wd[data-tab=ves] #pane-taf,.wd[data-tab=ves] #pane-loome,.wd[data-tab=taf] #pane-ves,.wd[data-tab=loome] #pane-ves{display:none}
+  .wd[data-tab=ves] #pane-ves{display:block}
+}
+html[data-wd-theme=light] #ves-root{color:#0f1419}
+html[data-wd-theme=light] #scroll-taf #ves-root{border-top-color:#cfd5de}
+html[data-wd-theme=light] #ves-root input[type=search],html[data-wd-theme=light] #ves-root input[type=text],html[data-wd-theme=light] #ves-root input[type=password]{background:#fff;border-color:#b7bfcb;color:#0f1419}
+html[data-wd-theme=light] #ves-root .vs-item{background:#fff;border-color:#cfd5de}
+html[data-wd-theme=light] #ves-root h2 b{color:#8a5700}
+html[data-wd-theme=light] #ves-root .vs-mmsi,html[data-wd-theme=light] #ves-root .vs-stat,html[data-wd-theme=light] #ves-root .vs-none,html[data-wd-theme=light] #ves-root .vs-ph figcaption,html[data-wd-theme=light] #ves-root .vs-form label{color:#454f5e}
+html[data-wd-theme=light] #ves-root .vs-form label.chk,html[data-wd-theme=light] #ves-root .vs-form input[type=file]{color:#0f1419}
+html[data-wd-theme=light] #ves-root .vs-btn.ghost{color:#8a5700;border-color:#8a5700}
+html[data-wd-theme=light] #ves-root .vs-badge.on{color:#1c64a8;border-color:#1c64a8}
+html[data-wd-theme=light] #ves-root .vs-form{border-top-color:#cfd5de}
 html[data-wd-theme=light] #taf-root .flight{background:rgba(255,255,255,.96)}
 html[data-wd-theme=light] #taf-root .apmenu,html[data-wd-theme=light] #taf-root .sugg,html[data-wd-theme=light] #taf-root .arrmenu{background:#fff;box-shadow:0 10px 28px rgba(15,20,25,.18)}
 html[data-wd-theme=light] #taf-root .editor{border-color:#e0c27a}
@@ -721,7 +768,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 <body>
 <div class="wd" id="wd" data-tab="taf">
 <header class="wd-top"><span class="wd-name">Weather<b>Dashboard</b></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
-<div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button></div>
+<div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button><button role="tab" data-tab="ves" aria-controls="pane-ves" aria-selected="false" tabindex="-1">Vessels</button></div>
 <section class="wd-pane" id="pane-taf" role="tabpanel" aria-label="TAF Timeline"><div class="wd-scroll" id="scroll-taf"><div id="taf-root">
 
 <div class="wrap" id="mainView">
@@ -830,7 +877,8 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 
 <div class="pagever" role="contentinfo" title="Page version 1.8">v1.8</div>
 
-</div><div class="wd-ver" role="contentinfo" title="WeatherDashboard 1.3 with TAF Timeline v1.25 and LOOME Night Ops v1.8">WeatherDashboard v1.3</div></div></section>
+</div><div class="wd-ver" role="contentinfo" title="WeatherDashboard 1.4 with TAF Timeline v1.25, LOOME Night Ops v1.8 and Vessels v1.0">WeatherDashboard v1.4</div></div></section>
+<section class="wd-pane" id="pane-ves" role="tabpanel" aria-label="Vessels"><div class="wd-scroll" id="scroll-ves"><div id="ves-root"></div></div></section>
 </div>
 <script>
 // Two apps share this page. Their own on-screen Back buttons handle their pages, so the browser history is left alone.
@@ -4958,6 +5006,169 @@ function init(){
 init();
 </script>
 <script>
+/* Vessels v1.0: search the curated vessel list, show photos from the ais-photos repo, upload new photos. */
+(function () {
+  var BASE = 'https://tomandreas.github.io/ais-photos/';
+  var API = '/api/vessel-photo';
+  var root = document.getElementById('ves-root');
+  var data = { vessels: [], photos: {} };
+  var open = null, formFor = null;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function norm(s) { return String(s || '').toUpperCase().replace(/\s+/g, ' ').trim(); }
+
+  root.innerHTML =
+    '<h2>Vessel <b>Photos</b></h2>' +
+    '<div class="vs-stat" id="vsStat">Loading vessel list…</div>' +
+    '<input type="search" id="vsQ" placeholder="Search vessel name or MMSI" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
+    '<div class="vs-list" id="vsList"></div>' +
+    '<div class="vs-hint">Photos appear in the ForeFlight AIS layer within about 10 minutes of upload.</div>';
+  var q = document.getElementById('vsQ'), list = document.getElementById('vsList'), stat = document.getElementById('vsStat');
+
+  function load() {
+    var t = '?t=' + Date.now();
+    Promise.all([fetch(BASE + 'vessels.json' + t).then(function (r) { return r.json(); }), fetch(BASE + 'photos.json' + t).then(function (r) { return r.json(); })])
+      .then(function (a) { set(a[0], a[1]); try { localStorage.setItem('ves.data', JSON.stringify({ v: a[0], p: a[1] })); } catch (e) {} })
+      .catch(function () {
+        try { var c = JSON.parse(localStorage.getItem('ves.data')); if (c) { set(c.v, c.p); stat.textContent += ' (offline copy)'; return; } } catch (e) {}
+        stat.textContent = 'Vessel list not available (no connection).';
+      });
+  }
+  function set(v, p) {
+    data.vessels = Array.isArray(v) ? v : []; data.photos = p && typeof p === 'object' ? p : {};
+    // vessels that have photos but are missing from the list (should not happen, but be safe)
+    var known = {}; data.vessels.forEach(function (x) { if (x.mmsi) known[x.mmsi] = 1; });
+    Object.keys(data.photos).forEach(function (m) { if (!known[m]) data.vessels.push({ name: 'MMSI ' + m, mmsi: m }); });
+    data.vessels.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var withP = data.vessels.filter(function (x) { return x.mmsi && data.photos[x.mmsi]; }).length;
+    stat.textContent = data.vessels.length + ' vessels · ' + withP + ' with photos';
+    render();
+  }
+  function photosOf(v) { return v.mmsi && data.photos[v.mmsi] ? data.photos[v.mmsi] : []; }
+  function key(v) { return v.mmsi || 'n:' + v.name; }
+
+  function render() {
+    var s = norm(q.value);
+    if (!s) { list.innerHTML = ''; return; }
+    var hits = data.vessels.filter(function (v) { return norm(v.name).indexOf(s) >= 0 || (v.mmsi && String(v.mmsi).indexOf(s) === 0); }).slice(0, 30);
+    var h = hits.map(function (v) {
+      var ph = photosOf(v), k = key(v);
+      var body = '';
+      if (open === k) {
+        body = '<div class="vs-body">' + (ph.length ? ph.map(function (p) {
+          return '<figure class="vs-ph"><img loading="lazy" src="' + esc(p.src || BASE + p.file) + '" alt="' + esc(v.name) + '">' +
+            '<figcaption>' + esc([p.caption, p.credit].filter(Boolean).join(' · ')) + '</figcaption></figure>';
+        }).join('') : '<div class="vs-none">No photo yet.</div>') +
+          (formFor === k ? form(v, false) : '<button class="vs-btn ghost" data-act="add" data-k="' + esc(k) + '">' + (ph.length ? 'Add another photo' : 'Upload photo') + '</button>') +
+          '</div>';
+      }
+      return '<div class="vs-item"><div class="vs-head" data-act="open" data-k="' + esc(k) + '" role="button" tabindex="0" aria-expanded="' + (open === k) + '">' +
+        '<span class="vs-name">' + esc(v.name) + '</span><span class="vs-mmsi">' + esc(v.mmsi || 'MMSI ?') + '</span>' +
+        '<span class="vs-badge' + (ph.length ? ' on' : '') + '">' + (ph.length ? ph.length + ' photo' + (ph.length > 1 ? 's' : '') : 'no photo') + '</span></div>' + body + '</div>';
+    }).join('');
+    if (!hits.length && s.length >= 3) {
+      var nv = { name: s, mmsi: null, isNew: true };
+      h = '<div class="vs-item"><div class="vs-head"><span class="vs-name">Not in the list</span></div><div class="vs-body">' +
+        '<div class="vs-none">Add a photo for a vessel that is not listed. Leave MMSI empty to look it up from current AIS data by name.</div>' +
+        (formFor === 'new' ? form(nv, true) : '<button class="vs-btn ghost" data-act="add" data-k="new">Upload photo for new vessel</button>') + '</div></div>';
+    }
+    list.innerHTML = h;
+  }
+
+  function form(v, isNew) {
+    var code = ''; try { code = localStorage.getItem('ves.code') || ''; } catch (e) {}
+    var who = ''; try { who = localStorage.getItem('ves.who') || ''; } catch (e) {}
+    return '<div class="vs-form" data-name="' + esc(v.name) + '" data-mmsi="' + esc(v.mmsi || '') + '">' +
+      (isNew ? '<label>Vessel name<input type="text" class="f-name" value="' + esc(v.name) + '"></label>' : '') +
+      (isNew || !v.mmsi ? '<label>MMSI (optional – looked up from AIS by name if empty)<input type="text" class="f-mmsi" inputmode="numeric" maxlength="9"></label>' : '') +
+      '<label>Photo<input type="file" class="f-file" accept="image/*"></label>' +
+      '<label>Name of photographer<input type="text" class="f-who" value="' + esc(who) + '" maxlength="80"></label>' +
+      '<label>Upload code<input type="password" class="f-code" value="' + esc(code) + '" autocomplete="off"></label>' +
+      '<label class="chk"><input type="checkbox" class="f-ok"><span>I have the photographer’s permission to share this photo.</span></label>' +
+      '<button class="vs-btn" data-act="send">Upload</button><div class="vs-msg"></div></div>';
+  }
+
+  // Resize on the device: longest side 1000 px, aspect ratio kept, JPEG, metadata (incl. GPS) dropped
+  function resize(file) {
+    var MAX = 1000;
+    function draw(src, w, h) {
+      var k = Math.min(1, MAX / Math.max(w, h)), c = document.createElement('canvas');
+      c.width = Math.round(w * k); c.height = Math.round(h * k);
+      c.getContext('2d').drawImage(src, 0, 0, c.width, c.height);
+      return new Promise(function (ok, bad) { c.toBlob(function (b) { b ? ok(b) : bad(new Error('Could not convert the image')); }, 'image/jpeg', 0.82); });
+    }
+    if (window.createImageBitmap) {
+      return createImageBitmap(file, { imageOrientation: 'from-image' }).then(function (bm) { return draw(bm, bm.width, bm.height); })
+        .catch(function () { return viaImg(); });
+    }
+    return viaImg();
+    function viaImg() {
+      return new Promise(function (ok, bad) {
+        var u = URL.createObjectURL(file), im = new Image();
+        im.onload = function () { URL.revokeObjectURL(u); draw(im, im.naturalWidth, im.naturalHeight).then(ok, bad); };
+        im.onerror = function () { URL.revokeObjectURL(u); bad(new Error('This image format is not supported here. Try a JPG or PNG.')); };
+        im.src = u;
+      });
+    }
+  }
+  function b64(blob) { return new Promise(function (ok, bad) { var r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = bad; r.readAsDataURL(blob); }); }
+
+  function send(f, btn) {
+    var msg = f.querySelector('.vs-msg');
+    function say(t, cls) { msg.textContent = t; msg.className = 'vs-msg' + (cls ? ' ' + cls : ''); }
+    var file = f.querySelector('.f-file').files[0];
+    var who = f.querySelector('.f-who').value.trim(), code = f.querySelector('.f-code').value.trim();
+    var name = f.querySelector('.f-name') ? f.querySelector('.f-name').value.trim() : f.dataset.name;
+    var mmsi = f.querySelector('.f-mmsi') ? f.querySelector('.f-mmsi').value.trim() : f.dataset.mmsi;
+    if (!file) return say('Choose a photo.', 'bad');
+    if (!who) return say('Enter the name of the photographer.', 'bad');
+    if (!code) return say('Enter the upload code.', 'bad');
+    if (!f.querySelector('.f-ok').checked) return say('Confirm that you have permission to share the photo.', 'bad');
+    if (mmsi && !/^\d{9}$/.test(mmsi)) return say('MMSI must be 9 digits.', 'bad');
+    btn.disabled = true; say('Resizing…');
+    var blob;
+    resize(file).then(function (b) { blob = b; say('Uploading…'); return b64(b); })
+      .then(function (img) {
+        return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: code, name: name, mmsi: mmsi || null, photographer: who, consent: true, image: img }) });
+      })
+      .then(function (r) { return r.json().catch(function () { return { error: 'Upload failed (HTTP ' + r.status + ')' }; }).then(function (j) { if (!r.ok || j.error) throw new Error(j.error || 'Upload failed'); return j; }); })
+      .then(function (j) {
+        try { localStorage.setItem('ves.code', code); localStorage.setItem('ves.who', who); } catch (e) {}
+        var m = String(j.mmsi);
+        var v = data.vessels.filter(function (x) { return x.mmsi === m || norm(x.name) === norm(j.name); })[0];
+        if (!v) { v = { name: j.name, mmsi: m }; data.vessels.push(v); data.vessels.sort(function (a, b) { return a.name.localeCompare(b.name); }); }
+        v.mmsi = m;
+        (data.photos[m] = data.photos[m] || []).push({ file: j.file, credit: j.credit, src: URL.createObjectURL(blob) });
+        formFor = null; open = m; q.value = v.name; render();
+        var withP = data.vessels.filter(function (x) { return x.mmsi && data.photos[x.mmsi]; }).length;
+        stat.textContent = data.vessels.length + ' vessels · ' + withP + ' with photos · uploaded ' + j.file;
+      })
+      .catch(function (e) { btn.disabled = false; say(e.message || String(e), 'bad'); });
+  }
+
+  q.addEventListener('input', function () { open = null; formFor = null; render(); });
+  list.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    if (a.dataset.act === 'open') { open = open === a.dataset.k ? null : a.dataset.k; formFor = null; render(); }
+    else if (a.dataset.act === 'add') { formFor = a.dataset.k; if (a.dataset.k !== 'new') open = a.dataset.k; render(); }
+    else if (a.dataset.act === 'send') send(a.closest('.vs-form'), a);
+  });
+  list.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.vs-head[data-act]')) { e.preventDefault(); e.target.click(); } });
+
+  // PC: below the TAF timeline. Phone/tablet (< 1100 px): its own tab.
+  var mq = window.matchMedia('(max-width:1099px)'), wd = document.getElementById('wd');
+  function place() {
+    var target = document.getElementById(mq.matches ? 'scroll-ves' : 'scroll-taf');
+    if (root.parentNode !== target) target.appendChild(root);
+    wd.classList.toggle('ves-docked', !mq.matches);
+  }
+  if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
+  place();
+  load();
+})();
+</script>
+<script>
 (function () {
   var wd = document.getElementById('wd'), KEY = 'wd.tab';
   function setTab(t, focus) {
@@ -4979,13 +5190,14 @@ init();
   }
   setTheme(document.documentElement.getAttribute('data-wd-theme') === 'light');
   sw.addEventListener('click', function () { setTheme(document.documentElement.getAttribute('data-wd-theme') !== 'light'); });
-  var t0 = 'taf'; try { t0 = localStorage.getItem(KEY) === 'loome' ? 'loome' : 'taf'; } catch (e) {}
+  var TABS = ['taf', 'loome', 'ves'];
+  var t0 = 'taf'; try { var st = localStorage.getItem(KEY); if (TABS.indexOf(st) >= 0) t0 = st; } catch (e) {}
   setTab(t0);
   var tabs = document.querySelector('.wd-tabs');
   tabs.addEventListener('click', function (e) { var b = e.target.closest('[data-tab]'); if (b) setTab(b.dataset.tab); });
   tabs.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    e.preventDefault(); setTab(wd.dataset.tab === 'taf' ? 'loome' : 'taf', true);
+    e.preventDefault(); var i = TABS.indexOf(wd.dataset.tab); setTab(TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length], true);
   });
 })();
 </script>
