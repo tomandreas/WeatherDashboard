@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="page-version" content="1.0">
+<title>Vessel admin · WeatherDashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e14;--surface:#121722;--line:#1d2432;--line2:#2a3242;--text:#d7dde8;--muted:#7d8799;--amber:#e8a020;--blue:#4ea8de;--bad:#e05a5a;--good:#5fbf7a;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--disp:'Bebas Neue','Arial Narrow',Impact,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 var(--mono)}
+body{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px;background-attachment:fixed;padding-bottom:env(safe-area-inset-bottom)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:var(--bg);border-bottom:1px solid var(--line)}
+h1{font:24px/1 var(--disp);letter-spacing:.05em;margin:0;font-weight:400}h1 b{font-weight:400;color:var(--amber)}
+.v{font-size:10px;color:#566074}
+nav{display:flex;gap:4px;margin-left:auto}
+nav button{background:none;border:1px solid transparent;color:var(--muted);font:17px/1 var(--disp);letter-spacing:.06em;padding:8px 12px;border-radius:8px;cursor:pointer}
+nav button.on{color:var(--amber);border-color:var(--line2);background:var(--surface)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+input,select{width:100%;background:var(--surface);border:1px solid var(--line2);border-radius:8px;color:var(--text);font:15px/1.3 var(--mono);padding:9px 11px;outline:none}
+input:focus{border-color:var(--blue)}
+.btn{border:1px solid var(--amber);background:var(--amber);color:#14100a;border-radius:8px;font:600 12px/1 var(--mono);padding:9px 12px;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--amber)}.btn.danger{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn.small{padding:6px 9px;font-size:11px}.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:8px;align-items:center}.row>input{flex:1}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.muted{color:var(--muted)}.small{font-size:12px}
+#login{max-width:360px;margin:12vh auto}#login h2{font:28px/1 var(--disp);font-weight:400;letter-spacing:.05em;margin:0 0 12px}
+.msg{min-height:1.2em;font-size:12px;margin-top:8px}.msg.bad{color:var(--bad)}.msg.ok{color:var(--good)}
+.split{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:14px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.list{max-height:70vh;overflow:auto;display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.li{display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+.li.on{border-color:var(--amber)}.li .n{flex:1;font-weight:600;font-size:13px}.li .m{font-size:11px;color:var(--muted)}
+.badge{font-size:10px;border:1px solid var(--line2);border-radius:10px;padding:1px 6px;color:var(--muted)}.badge.on{border-color:var(--blue);color:var(--blue)}
+.det h2{font:26px/1 var(--disp);font-weight:400;letter-spacing:.05em;margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--muted)}
+.ph{display:grid;grid-template-columns:160px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+@media (max-width:520px){.ph{grid-template-columns:1fr}}
+.ph img{width:100%;border-radius:6px;background:#000;display:block}
+.ph .f{font-size:11px;color:var(--muted);margin-bottom:6px}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.sec{font:16px/1 var(--disp);letter-spacing:.06em;color:var(--muted);margin:18px 0 4px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters button{background:var(--surface);border:1px solid var(--line2);color:var(--muted);border-radius:14px;padding:5px 11px;font:12px var(--mono);cursor:pointer}
+.filters button.on{border-color:var(--amber);color:var(--amber)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer}
+.tile img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#000}
+.tile div{padding:7px 9px;font-size:12px}.tile b{display:block;font-size:12px}.tile span{color:var(--muted);font-size:11px}
+.tile.none{display:flex;align-items:center;justify-content:center;min-height:120px;color:var(--muted);text-align:center;padding:8px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;font-size:12px;z-index:50;max-width:90vw}
+.toast[hidden]{display:none}
+.hint{font-size:11px;color:#566074;margin-top:14px}
+</style></head>
+<body>
+<header><h1>Vessel <b>Admin</b></h1><span class="v">v1.0</span>
+  <nav id="nav" hidden><button data-v="manage" class="on">Manage</button><button data-v="gallery">Gallery</button><button id="logout" title="Sign out">⎋</button></nav></header>
+<main>
+  <div id="login" class="card"><h2>Admin sign-in</h2>
+    <div class="row"><input id="code" type="password" placeholder="Admin code" autocomplete="current-password"><button class="btn" id="go">Sign in</button></div>
+    <div class="msg" id="lmsg"></div></div>
+
+  <section id="manage" hidden>
+    <div class="split">
+      <div class="card"><input id="q" type="search" placeholder="Search name or MMSI" autocomplete="off" spellcheck="false">
+        <div class="small muted" id="stat" style="margin-top:6px"></div><div class="list" id="list"></div></div>
+      <div class="card det" id="det"><div class="muted">Select a vessel.</div></div>
+    </div>
+  </section>
+
+  <section id="gallery" hidden>
+    <div class="row"><input id="gq" type="search" placeholder="Search name, MMSI or credit" autocomplete="off" spellcheck="false"></div>
+    <div class="filters" id="gf"><button data-f="all" class="on">All photos</button><button data-f="unknown">Unknown credit</button><button data-f="nophoto">Vessels without photos</button></div>
+    <div class="small muted" id="gstat"></div>
+    <div class="gal" id="gal" style="margin-top:8px"></div>
+  </section>
+  <div class="hint">Changes are saved to the ais-photos repo straight away. They show in the dashboard within 1–2 minutes and in ForeFlight within about 3–8 minutes. Deleting is permanent.</div>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var API = '/api/vessel-admin', BASE = 'https://tomandreas.github.io/ais-photos/';
+  var code = '', D = { vessels: [], photos: {} }, sel = null, gfilter = 'all', bust = Date.now();
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function norm(s) { return String(s || '').toUpperCase().replace(/\s+/g, ' ').trim(); }
+  function toast(t, bad) { var e = $('toast'); e.textContent = t; e.style.color = bad ? 'var(--bad)' : ''; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { e.hidden = true; }, 4000); }
+  function call(action, extra) {
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ code: code, action: action }, extra || {})) })
+      .then(function (r) { return r.json().catch(function () { return { error: 'HTTP ' + r.status }; }).then(function (j) { if (!r.ok || j.error) { var e = new Error(j.error || 'Failed'); e.info = j; throw e; } return j; }); });
+  }
+  function src(f) { return BASE + f + '?v=' + bust; }
+  function photosOf(v) { return v && v.mmsi ? D.photos[v.mmsi] || [] : []; }
+  function key(v) { return v.mmsi ? 'm:' + v.mmsi : 'n:' + v.name; }
+  function byKey(k) { return D.vessels.filter(function (v) { return key(v) === k; })[0]; }
+
+  // ---------- sign-in ----------
+  function signIn(c) {
+    code = c; $('lmsg').textContent = 'Checking…'; $('lmsg').className = 'msg';
+    call('load').then(function (j) {
+      try { sessionStorage.setItem('adm.code', code); } catch (e) {}
+      $('login').hidden = true; $('nav').hidden = false; show('manage'); setData(j);
+    }).catch(function (e) { $('lmsg').textContent = e.message; $('lmsg').className = 'msg bad'; code = ''; });
+  }
+  $('go').onclick = function () { signIn($('code').value.trim()); };
+  $('code').onkeydown = function (e) { if (e.key === 'Enter') signIn($('code').value.trim()); };
+  $('logout').onclick = function () { try { sessionStorage.removeItem('adm.code'); } catch (e) {} location.reload(); };
+  try { var c0 = sessionStorage.getItem('adm.code'); if (c0) signIn(c0); } catch (e) {}
+
+  function show(v) {
+    $('manage').hidden = v !== 'manage'; $('gallery').hidden = v !== 'gallery';
+    [].forEach.call($('nav').querySelectorAll('[data-v]'), function (b) { b.classList.toggle('on', b.dataset.v === v); });
+    if (v === 'gallery') renderGallery();
+  }
+  $('nav').onclick = function (e) { var b = e.target.closest('[data-v]'); if (b) show(b.dataset.v); };
+
+  function setData(j) {
+    D.vessels = (j.vessels || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); }); D.photos = j.photos || {}; bust = Date.now();
+    var withP = D.vessels.filter(function (v) { return photosOf(v).length; }).length, n = 0;
+    for (var m in D.photos) n += D.photos[m].length;
+    $('stat').textContent = D.vessels.length + ' vessels · ' + withP + ' with photos · ' + n + ' photos';
+    renderList(); renderDet(); if (!$('gallery').hidden) renderGallery();
+  }
+  function reload(msg) { return call('load').then(function (j) { setData(j); if (msg) toast(msg); }); }
+  // Run an action, then reload the data from GitHub
+  function act(action, extra, okMsg, btn) {
+    if (btn) btn.disabled = true;
+    return call(action, extra).then(function (j) { return reload(okMsg).then(function () { return j; }); })
+      .catch(function (e) { if (btn) btn.disabled = false; toast(e.message, true); throw e; });
+  }
+
+  // ---------- manage ----------
+  function renderList() {
+    var s = norm($('q').value);
+    var hits = D.vessels.filter(function (v) { return !s || norm(v.name).indexOf(s) >= 0 || (v.mmsi && String(v.mmsi).indexOf(s) === 0); });
+    $('list').innerHTML = hits.map(function (v) {
+      var n = photosOf(v).length;
+      return '<div class="li' + (sel === key(v) ? ' on' : '') + '" data-k="' + esc(key(v)) + '"><span class="n">' + esc(v.name) + '</span><span class="m">' + esc(v.mmsi || 'no MMSI') + '</span>' +
+        '<span class="badge' + (n ? ' on' : '') + '">' + n + '</span></div>';
+    }).join('') || '<div class="muted small">No match.</div>';
+  }
+  $('q').oninput = renderList;
+  $('list').onclick = function (e) { var r = e.target.closest('.li'); if (r) { sel = r.dataset.k; renderList(); renderDet(); if (innerWidth < 820) $('det').scrollIntoView({ behavior: 'smooth' }); } };
+
+  function renderDet() {
+    var v = sel && byKey(sel);
+    if (!v) { $('det').innerHTML = '<div class="muted">Select a vessel.</div>'; return; }
+    var ph = photosOf(v);
+    var h = '<h2>' + esc(v.name) + '</h2>' +
+      '<div class="grid2"><label>Name<input id="eName" value="' + esc(v.name) + '"></label>' +
+      '<label>MMSI<input id="eMmsi" value="' + esc(v.mmsi || '') + '" inputmode="numeric" maxlength="9"></label></div>' +
+      '<div class="acts"><button class="btn small" data-a="saveV">Save name / MMSI</button><button class="btn danger small" data-a="delV">Delete vessel</button></div>' +
+      '<div class="sec">Photos (' + ph.length + ')</div>';
+    if (!ph.length) h += '<div class="muted small">No photos.</div>';
+    ph.forEach(function (p, i) {
+      h += '<div class="ph" data-f="' + esc(p.file) + '"><img loading="lazy" src="' + esc(src(p.file)) + '" alt="">' +
+        '<div><div class="f">' + esc(p.file) + (i === 0 ? ' · shown first' : '') + '</div>' +
+        '<label>Credit<div class="row"><input class="cr" value="' + esc(p.credit || '') + '"><button class="btn small" data-a="credit">Save</button></div></label>' +
+        '<div class="acts">' +
+          '<button class="btn ghost small" data-a="up"' + (i === 0 ? ' disabled' : '') + '>↑ Up</button>' +
+          '<button class="btn ghost small" data-a="down"' + (i === ph.length - 1 ? ' disabled' : '') + '>↓ Down</button>' +
+          '<button class="btn ghost small" data-a="move">Move to…</button>' +
+          '<button class="btn danger small" data-a="delP">Delete</button></div>' +
+        '<div class="mv" hidden><label style="margin-top:8px">Move to vessel (name or MMSI)<div class="row"><input class="mvq" list="vlist" placeholder="Search vessel"><button class="btn small" data-a="doMove">Move</button></div></label></div>' +
+        '</div></div>';
+    });
+    $('det').innerHTML = h + '<datalist id="vlist">' + D.vessels.filter(function (x) { return x.mmsi && x.mmsi !== v.mmsi; })
+      .map(function (x) { return '<option value="' + esc(x.name + ' · ' + x.mmsi) + '">'; }).join('') + '</datalist>';
+  }
+
+  $('det').onclick = function (e) {
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var v = byKey(sel); if (!v) return;
+    var row = b.closest('.ph'), file = row && row.dataset.f, ph = photosOf(v), a = b.dataset.a;
+    var ref = v.mmsi ? { mmsi: v.mmsi } : { name: v.name };
+    if (a === 'saveV') {
+      var nn = $('eName').value.trim(), nm = $('eMmsi').value.trim(), x = {};
+      if (nn && norm(nn) !== norm(v.name)) x.newName = nn;
+      if (nm && nm !== (v.mmsi || '')) { if (!/^[2-7]\d{8}$/.test(nm)) return toast('MMSI must be 9 digits starting with 2–7', true); x.newMmsi = nm; }
+      if (!x.newName && !x.newMmsi) return toast('Nothing changed');
+      if (x.newMmsi && v.mmsi && ph.length && !confirm('Change MMSI ' + v.mmsi + ' → ' + x.newMmsi + '? The ' + ph.length + ' photo file(s) will be renamed.')) return;
+      act('editVessel', Object.assign({}, ref, x), 'Vessel saved', b).then(function () { sel = x.newMmsi ? 'm:' + x.newMmsi : (v.mmsi ? 'm:' + v.mmsi : 'n:' + norm(x.newName || v.name)); renderList(); renderDet(); });
+    } else if (a === 'delV') {
+      if (!confirm('Delete ' + v.name + ' from the vessel list?' + (ph.length ? ' Its ' + ph.length + ' photo(s) will be deleted permanently.' : ''))) return;
+      act('deleteVessel', Object.assign({ withPhotos: ph.length > 0 }, ref), v.name + ' deleted', b).then(function () { sel = null; renderList(); renderDet(); });
+    } else if (a === 'credit') {
+      act('setCredit', { mmsi: v.mmsi, file: file, credit: row.querySelector('.cr').value }, 'Credit saved', b);
+    } else if (a === 'up' || a === 'down') {
+      var files = ph.map(function (p) { return p.file; }), i = files.indexOf(file), j = a === 'up' ? i - 1 : i + 1;
+      var t = files[i]; files[i] = files[j]; files[j] = t;
+      act('reorder', { mmsi: v.mmsi, files: files }, 'Order saved', b);
+    } else if (a === 'delP') {
+      if (!confirm('Delete ' + file + ' permanently?')) return;
+      act('deletePhoto', { mmsi: v.mmsi, file: file }, 'Photo deleted', b);
+    } else if (a === 'move') {
+      var mv = row.querySelector('.mv'); mv.hidden = !mv.hidden; if (!mv.hidden) row.querySelector('.mvq').focus();
+    } else if (a === 'doMove') {
+      var qv = row.querySelector('.mvq').value, mm = (qv.match(/\b([2-7]\d{8})\b/) || [])[1];
+      if (!mm) { var hit = D.vessels.filter(function (x) { return x.mmsi && norm(x.name) === norm(qv); }); if (hit.length === 1) mm = hit[0].mmsi; }
+      if (!mm) return toast('Choose a vessel from the list (it needs an MMSI)', true);
+      var tgt = D.vessels.filter(function (x) { return x.mmsi === mm; })[0];
+      if (!confirm('Move ' + file + ' to ' + (tgt ? tgt.name + ' · ' : '') + mm + '?')) return;
+      act('movePhoto', { mmsi: v.mmsi, file: file, toMmsi: mm }, 'Photo moved', b);
+    }
+  };
+
+  // ---------- gallery ----------
+  function renderGallery() {
+    var s = norm($('gq').value), h = '', n = 0;
+    var nameOf = {}; D.vessels.forEach(function (v) { if (v.mmsi) nameOf[v.mmsi] = v.name; });
+    if (gfilter === 'nophoto') {
+      D.vessels.filter(function (v) { return !photosOf(v).length && (!s || norm(v.name).indexOf(s) >= 0 || String(v.mmsi || '').indexOf(s) === 0); }).forEach(function (v) {
+        n++; h += '<div class="tile none" data-k="' + esc(key(v)) + '"><div><b>' + esc(v.name) + '</b><span>' + esc(v.mmsi || 'no MMSI') + '</span></div></div>';
+      });
+      $('gstat').textContent = n + ' vessels without photos';
+    } else {
+      Object.keys(D.photos).forEach(function (m) {
+        (D.photos[m] || []).forEach(function (p) {
+          var nm = nameOf[m] || ('MMSI ' + m), unk = !p.credit || /unknown/i.test(p.credit);
+          if (gfilter === 'unknown' && !unk) return;
+          if (s && norm(nm).indexOf(s) < 0 && m.indexOf(s) !== 0 && norm(p.credit).indexOf(s) < 0) return;
+          n++; h += '<div class="tile" data-k="m:' + esc(m) + '"><img loading="lazy" src="' + esc(src(p.file)) + '" alt=""><div><b>' + esc(nm) + '</b><span>' + esc(p.credit || 'no credit') + '</span></div></div>';
+        });
+      });
+      $('gstat').textContent = n + ' photos';
+    }
+    $('gal').innerHTML = h || '<div class="muted small">Nothing to show.</div>';
+  }
+  $('gq').oninput = renderGallery;
+  $('gf').onclick = function (e) { var b = e.target.closest('[data-f]'); if (!b) return; gfilter = b.dataset.f; [].forEach.call($('gf').children, function (x) { x.classList.toggle('on', x === b); }); renderGallery(); };
+  $('gal').onclick = function (e) { var t = e.target.closest('.tile'); if (!t) return; sel = t.dataset.k; $('q').value = ''; show('manage'); renderList(); renderDet(); window.scrollTo(0, 0); };
+})();
+</script>
+</body></html>
