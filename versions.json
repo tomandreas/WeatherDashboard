@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 5,
+   "current": 6,
    "versions": [
     {
      "v": 1,
@@ -47,6 +47,15 @@
      "note": "Light theme: petrol accent (#27535C) replaces brown across TAF, LOOME and Vessels (titles, labels, selected mode, AIP warning); amber fills unchanged. Selected mode frame follows the switch's rounded corners (both themes). Vessels v1.1: space below the section, search field scrolls to the top when used, full-screen photo viewer (wheel/pinch zoom, drag, double-click/tap reset, Esc/✕ to close).",
      "bytes": 4454241,
      "sha": "f1ca145c2c3ae48ef3cfc9c191c8fa982a4818aebad6db60a5110795b4649603"
+    },
+    {
+     "v": 6,
+     "label": "1.6",
+     "file": "index.v6.html",
+     "archived": "2026-10-26",
+     "note": "Version number in the header (LOOME footer line removed). TAF Timeline v1.26: Edit aerodromes has ✕ to remove (with Undo) and the add/search field. Vessels v1.2: MMSI required only for vessels without one, Find MMSI from AIS with picker, MMSI format check (2–7 + 8 digits), hard stop on name/MMSI mismatch with Use AIS name, Upload anyway when MMSI not in AIS, no duplicate MMSIs, Add as separate / Go to existing for same name, vessel type in results. Requires api/vessel-photo.js v1.1.",
+     "bytes": 4459829,
+     "sha": "09250901e92ad3cf6dd6027e5cdaefff3487ce2c856ea1fabc68ba4cee3b8d8e"
     }
    ]
   }
