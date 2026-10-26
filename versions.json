@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 4,
+   "current": 5,
    "versions": [
     {
      "v": 1,
@@ -38,6 +38,15 @@
      "note": "New Vessels section (v1.0): search the curated vessel list by name or MMSI, view photos from the ais-photos repo, and upload new photos (resized on the device, credit required, shared upload code) via /api/vessel-photo. Own tab below 1100 px, below the TAF timeline on wide screens. TAF v1.25 and LOOME v1.8 unchanged.",
      "bytes": 4448824,
      "sha": "2e4cfb1b1970f7a4fe9176bb4eea3830ae5f7729915bebf662b4fe74733cca54"
+    },
+    {
+     "v": 5,
+     "label": "1.5",
+     "file": "index.v5.html",
+     "archived": "2026-10-26",
+     "note": "Light theme: petrol accent (#27535C) replaces brown across TAF, LOOME and Vessels (titles, labels, selected mode, AIP warning); amber fills unchanged. Selected mode frame follows the switch's rounded corners (both themes). Vessels v1.1: space below the section, search field scrolls to the top when used, full-screen photo viewer (wheel/pinch zoom, drag, double-click/tap reset, Esc/✕ to close).",
+     "bytes": 4454241,
+     "sha": "f1ca145c2c3ae48ef3cfc9c191c8fa982a4818aebad6db60a5110795b4649603"
     }
    ]
   }

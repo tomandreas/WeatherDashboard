@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.4">
+<meta name="page-version" content="1.5">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -54,7 +54,7 @@ html[data-wd-theme=light],html[data-wd-theme=light] body{background:#f3f4f6;colo
 html[data-wd-theme=light] body{color:#0f1419}
 html[data-wd-theme=light] .wd-top{background:#fff;border-bottom-color:#cfd5de}
 html[data-wd-theme=light] .wd-name{color:#0f1419}
-html[data-wd-theme=light] .wd-name b{color:#8a5700}
+html[data-wd-theme=light] .wd-name b{color:#27535c}
 html[data-wd-theme=light] .wd-theme{color:#454f5e}
 html[data-wd-theme=light] .wd-sw{background:#fff;border-color:#b7bfcb}
 html[data-wd-theme=light] #pane-loome{border-left-color:#cfd5de}
@@ -63,14 +63,22 @@ html[data-wd-theme=light] .wd-scroll::-webkit-scrollbar-thumb{background:#b7bfcb
 html[data-wd-theme=light] .wd-ver{color:#6b7585}
 html[data-wd-theme=light] .wd-tabs{background:#fff;border-bottom-color:#cfd5de}
 html[data-wd-theme=light] .wd-tabs button{color:#454f5e}
-html[data-wd-theme=light] .wd-tabs button[aria-selected=true]{background:#f3f4f6;color:#8a5700}
-html[data-wd-theme=light] #taf-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2f5;--line:#cfd5de;--text:#0f1419;--muted:#454f5e;--faint:#6b7585;--amber:#8a5700;--blue:#1c64a8;--c-none:#d5dae2;background-image:none;color-scheme:light}
+html[data-wd-theme=light] .wd-tabs button[aria-selected=true]{background:#f3f4f6;color:#27535c}
+html[data-wd-theme=light] #taf-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2f5;--line:#cfd5de;--text:#0f1419;--muted:#454f5e;--faint:#6b7585;--amber:#27535c;--blue:#1c64a8;--c-none:#d5dae2;background-image:none;color-scheme:light}
 html[data-wd-theme=light] #taf-root .btn.primary{background:#e8a020;border-color:#e8a020;color:#14100a}
-html[data-wd-theme=light] #taf-root .warn{color:#6e4400;border-color:#e0c27a;background:#fdf3dc}
+html[data-wd-theme=light] #taf-root .warn{color:#27535c;border-color:#b9d3d6;background:#e8f2f3}
 html[data-wd-theme=light] #taf-root .warn.bad{color:#8e1c1c;border-color:#e9a7a7;background:#fbe5e5}
-/* Vessels v1.0 (ais-photos search and upload) */
+/* Vessels v1.1 (ais-photos search, upload, photo viewer) */
 #pane-ves{display:none}
-#ves-root{padding:14px 14px 4px;max-width:900px;margin:0 auto;box-sizing:border-box;color:#d7dde8}
+#ves-root{padding:14px 14px calc(40vh + env(safe-area-inset-bottom,0px));max-width:900px;margin:0 auto;box-sizing:border-box;color:#d7dde8}
+#ves-root #vsQ{scroll-margin-top:10px}
+#ves-root .vs-ph img{cursor:zoom-in}
+.vs-lb{position:fixed;inset:0;z-index:1000;background:rgba(5,7,10,.94);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.vs-lb[hidden]{display:none}
+.vs-lb-img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;cursor:grab;will-change:transform}
+.vs-lb-img.drag{cursor:grabbing}
+.vs-lb-x{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:2;width:40px;height:40px;border-radius:20px;border:1px solid #2a3242;background:#121722;color:#d7dde8;font-size:18px;cursor:pointer}
+.vs-lb-cap{position:absolute;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(5,7,10,.75);color:#d7dde8;font:12px/1.4 'LN Mono','IBM Plex Mono',ui-monospace,monospace;text-align:center}
 #scroll-taf #ves-root{border-top:1px solid #1d2432;margin-top:8px}
 .ves-docked #taf-root{min-height:0}
 #ves-root h2{font:22px/1 'LN Display','Bebas Neue','Arial Narrow',Impact,sans-serif;letter-spacing:.05em;margin:4px 0 10px;font-weight:400}
@@ -109,10 +117,10 @@ html[data-wd-theme=light] #ves-root{color:#0f1419}
 html[data-wd-theme=light] #scroll-taf #ves-root{border-top-color:#cfd5de}
 html[data-wd-theme=light] #ves-root input[type=search],html[data-wd-theme=light] #ves-root input[type=text],html[data-wd-theme=light] #ves-root input[type=password]{background:#fff;border-color:#b7bfcb;color:#0f1419}
 html[data-wd-theme=light] #ves-root .vs-item{background:#fff;border-color:#cfd5de}
-html[data-wd-theme=light] #ves-root h2 b{color:#8a5700}
+html[data-wd-theme=light] #ves-root h2 b{color:#27535c}
 html[data-wd-theme=light] #ves-root .vs-mmsi,html[data-wd-theme=light] #ves-root .vs-stat,html[data-wd-theme=light] #ves-root .vs-none,html[data-wd-theme=light] #ves-root .vs-ph figcaption,html[data-wd-theme=light] #ves-root .vs-form label{color:#454f5e}
 html[data-wd-theme=light] #ves-root .vs-form label.chk,html[data-wd-theme=light] #ves-root .vs-form input[type=file]{color:#0f1419}
-html[data-wd-theme=light] #ves-root .vs-btn.ghost{color:#8a5700;border-color:#8a5700}
+html[data-wd-theme=light] #ves-root .vs-btn.ghost{color:#27535c;border-color:#27535c}
 html[data-wd-theme=light] #ves-root .vs-badge.on{color:#1c64a8;border-color:#1c64a8}
 html[data-wd-theme=light] #ves-root .vs-form{border-top-color:#cfd5de}
 html[data-wd-theme=light] #taf-root .flight{background:rgba(255,255,255,.96)}
@@ -123,7 +131,7 @@ html[data-wd-theme=light] #taf-root .rrow.dragging{background:#fff;box-shadow:0 
 html[data-wd-theme=light] #taf-root .modal{background:rgba(15,20,25,.35)}
 html[data-wd-theme=light] #taf-root .mbox{box-shadow:0 18px 50px rgba(15,20,25,.25)}
 html[data-wd-theme=light] #taf-root .sumaxis span::after{background:#b7bfcb}
-html[data-wd-theme=light] #taf-root .modesw button.on{background:#fdf3dc}
+html[data-wd-theme=light] #taf-root .modesw button.on{background:#e0eeef}
 html[data-wd-theme=light] #taf-root .pill[style*="background:#3fb950"],html[data-wd-theme=light] #taf-root .pill[style*="background: rgb(63, 185, 80)"],html[data-wd-theme=light] #taf-root .mg[style*="background:#3fb950"],html[data-wd-theme=light] #taf-root .mg[style*="background: rgb(63, 185, 80)"],html[data-wd-theme=light] #taf-root .sbd[style*="background:#3fb950"],html[data-wd-theme=light] #taf-root .sbd[style*="background: rgb(63, 185, 80)"],html[data-wd-theme=light] #taf-root .vbadge[style*="background:#3fb950"],html[data-wd-theme=light] #taf-root .vbadge[style*="background: rgb(63, 185, 80)"],html[data-wd-theme=light] #taf-root .apbtn[style*="background:#3fb950"],html[data-wd-theme=light] #taf-root .apbtn[style*="background: rgb(63, 185, 80)"]{background:#dff0e1!important;color:#14532d!important;box-shadow:inset 0 0 0 1px #14532d33}
 html[data-wd-theme=light] #taf-root .hres[style*="color:#3fb950"],html[data-wd-theme=light] #taf-root .st[style*="color:#3fb950"]{color:#1b6b2a!important}
 html[data-wd-theme=light] #taf-root .pill[style*="background:#9cc53a"],html[data-wd-theme=light] #taf-root .pill[style*="background: rgb(156, 197, 58)"],html[data-wd-theme=light] #taf-root .mg[style*="background:#9cc53a"],html[data-wd-theme=light] #taf-root .mg[style*="background: rgb(156, 197, 58)"],html[data-wd-theme=light] #taf-root .sbd[style*="background:#9cc53a"],html[data-wd-theme=light] #taf-root .sbd[style*="background: rgb(156, 197, 58)"],html[data-wd-theme=light] #taf-root .vbadge[style*="background:#9cc53a"],html[data-wd-theme=light] #taf-root .vbadge[style*="background: rgb(156, 197, 58)"],html[data-wd-theme=light] #taf-root .apbtn[style*="background:#9cc53a"],html[data-wd-theme=light] #taf-root .apbtn[style*="background: rgb(156, 197, 58)"]{background:#edf5d6!important;color:#3d5a0b!important;box-shadow:inset 0 0 0 1px #3d5a0b33}
@@ -133,7 +141,7 @@ html[data-wd-theme=light] #taf-root .hres[style*="color:#e8a020"],html[data-wd-t
 html[data-wd-theme=light] #taf-root .pill[style*="background:#e5484d"],html[data-wd-theme=light] #taf-root .pill[style*="background: rgb(229, 72, 77)"],html[data-wd-theme=light] #taf-root .mg[style*="background:#e5484d"],html[data-wd-theme=light] #taf-root .mg[style*="background: rgb(229, 72, 77)"],html[data-wd-theme=light] #taf-root .sbd[style*="background:#e5484d"],html[data-wd-theme=light] #taf-root .sbd[style*="background: rgb(229, 72, 77)"],html[data-wd-theme=light] #taf-root .vbadge[style*="background:#e5484d"],html[data-wd-theme=light] #taf-root .vbadge[style*="background: rgb(229, 72, 77)"],html[data-wd-theme=light] #taf-root .apbtn[style*="background:#e5484d"],html[data-wd-theme=light] #taf-root .apbtn[style*="background: rgb(229, 72, 77)"]{background:#fbe1e1!important;color:#8e1c1c!important;box-shadow:inset 0 0 0 1px #8e1c1c33}
 html[data-wd-theme=light] #taf-root .hres[style*="color:#e5484d"],html[data-wd-theme=light] #taf-root .st[style*="color:#e5484d"]{color:#b42318!important}
 
-html[data-wd-theme=light] #loome-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2f5;--line:#cfd5de;--text:#0f1419;--dim:#454f5e;--faint:#6b7585;--amber:#8a5700;--blue:#1c64a8;--good:#1b7a3a;--bad:#b42318;background-image:none;color-scheme:light}
+html[data-wd-theme=light] #loome-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2f5;--line:#cfd5de;--text:#0f1419;--dim:#454f5e;--faint:#6b7585;--amber:#27535c;--blue:#1c64a8;--good:#1b7a3a;--bad:#b42318;background-image:none;color-scheme:light}
 html[data-wd-theme=light] #loome-root button.on,html[data-wd-theme=light] #loome-root .a-big{background:#e8a020;border-color:#e8a020;color:#14100a}
 html[data-wd-theme=light] #loome-root .a-now{background:#e8a020!important;color:#14100a!important}
 html[data-wd-theme=light] #loome-root .a-sw{background:#c3cad4}
@@ -746,6 +754,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 #taf-root .modesw{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 10px;background:var(--surface)}
 #taf-root .modesw button{flex:1;background:none;border:none;border-right:1px solid var(--line);border-radius:0;color:var(--muted);font:600 12px var(--mono);letter-spacing:.3px;padding:10px 4px;min-height:42px}
 #taf-root .modesw button:last-child{border-right:none}
+#taf-root .modesw button:first-child{border-radius:9px 0 0 9px}#taf-root .modesw button:last-child{border-radius:0 9px 9px 0}
 #taf-root .modesw button.on{background:#1d2433;color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
 #taf-root .vfrline{font-size:11.5px;color:var(--muted);line-height:1.5;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 6px;background:var(--surface2)}
 #taf-root .vfrline b{color:var(--amber);font-weight:600;margin-right:4px}
@@ -877,7 +886,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 
 <div class="pagever" role="contentinfo" title="Page version 1.8">v1.8</div>
 
-</div><div class="wd-ver" role="contentinfo" title="WeatherDashboard 1.4 with TAF Timeline v1.25, LOOME Night Ops v1.8 and Vessels v1.0">WeatherDashboard v1.4</div></div></section>
+</div><div class="wd-ver" role="contentinfo" title="WeatherDashboard 1.5 with TAF Timeline v1.25, LOOME Night Ops v1.8 and Vessels v1.1">WeatherDashboard v1.5</div></div></section>
 <section class="wd-pane" id="pane-ves" role="tabpanel" aria-label="Vessels"><div class="wd-scroll" id="scroll-ves"><div id="ves-root"></div></div></section>
 </div>
 <script>
@@ -5147,8 +5156,71 @@ init();
       .catch(function (e) { btn.disabled = false; say(e.message || String(e), 'bad'); });
   }
 
+  // Full-screen photo viewer: wheel / pinch to zoom, drag to pan, double-click or double-tap to reset
+  var lb = document.createElement('div');
+  lb.className = 'vs-lb'; lb.hidden = true; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
+  lb.innerHTML = '<button class="vs-lb-x" aria-label="Close">✕</button><img class="vs-lb-img" alt=""><div class="vs-lb-cap"></div>';
+  document.body.appendChild(lb);
+  var lbImg = lb.querySelector('.vs-lb-img'), lbCap = lb.querySelector('.vs-lb-cap');
+  var z = { s0: 1, k: 1, tx: 0, ty: 0 }, ptrs = {}, pinch = null, moved = false, lastTap = 0, downOnBg = false;
+  function apply() { lbImg.style.transform = 'translate(' + z.tx + 'px,' + z.ty + 'px) scale(' + (z.s0 * z.k) + ')'; }
+  function fit() {
+    var W = lb.clientWidth, H = lb.clientHeight - lbCap.offsetHeight, iw = lbImg.naturalWidth || 1, ih = lbImg.naturalHeight || 1;
+    z.s0 = Math.min(W / iw, H / ih); z.k = 1; z.tx = (W - iw * z.s0) / 2; z.ty = (H - ih * z.s0) / 2; apply();
+  }
+  function clampPan() {
+    var W = lb.clientWidth, H = lb.clientHeight - lbCap.offsetHeight, w = lbImg.naturalWidth * z.s0 * z.k, h = lbImg.naturalHeight * z.s0 * z.k;
+    z.tx = w <= W ? (W - w) / 2 : Math.min(0, Math.max(W - w, z.tx));
+    z.ty = h <= H ? (H - h) / 2 : Math.min(0, Math.max(H - h, z.ty));
+  }
+  function zoomAt(px, py, k) {
+    k = Math.max(1, Math.min(Math.max(2, 3 / z.s0), k)); var r = k / z.k;   // up to 3x the photo's own pixels (at least 2x the fitted size)
+    z.tx = px - (px - z.tx) * r; z.ty = py - (py - z.ty) * r; z.k = k; clampPan(); apply();
+  }
+  function openLb(src, cap) { lbCap.textContent = cap || ''; lb.hidden = false; lbImg.onload = fit; lbImg.src = src; if (lbImg.complete) fit(); lb.querySelector('.vs-lb-x').focus(); }
+  function closeLb() { lb.hidden = true; lbImg.removeAttribute('src'); ptrs = {}; pinch = null; }
+  lb.addEventListener('wheel', function (e) { e.preventDefault(); zoomAt(e.clientX, e.clientY, z.k * Math.pow(1.0015, -e.deltaY)); }, { passive: false });
+  lb.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.vs-lb-x')) return;
+    downOnBg = e.target === lb; lb.setPointerCapture(e.pointerId); ptrs[e.pointerId] = { x: e.clientX, y: e.clientY }; moved = false;
+    var ids = Object.keys(ptrs);
+    if (ids.length === 2) { var a = ptrs[ids[0]], b = ptrs[ids[1]]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), k: z.k }; }
+    lbImg.classList.add('drag');
+  });
+  lb.addEventListener('pointermove', function (e) {
+    var p = ptrs[e.pointerId]; if (!p) return;
+    var dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY;
+    if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+    var ids = Object.keys(ptrs);
+    if (ids.length === 2 && pinch) {
+      var a = ptrs[ids[0]], b = ptrs[ids[1]], d = Math.hypot(a.x - b.x, a.y - b.y);
+      zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, pinch.k * d / pinch.d);
+    } else if (ids.length === 1 && z.k > 1) { z.tx += dx; z.ty += dy; clampPan(); apply(); }
+  });
+  function up(e) {
+    if (!ptrs[e.pointerId]) return;
+    delete ptrs[e.pointerId]; if (Object.keys(ptrs).length < 2) pinch = null;
+    if (Object.keys(ptrs).length) return;
+    lbImg.classList.remove('drag');
+    if (moved) return;
+    var now = Date.now();
+    if (now - lastTap < 300) { if (z.k > 1) fit(); else zoomAt(e.clientX, e.clientY, 2.5); lastTap = 0; return; }
+    lastTap = now;
+    if (downOnBg) setTimeout(function () { if (lastTap === now) closeLb(); }, 300);   // single tap outside the photo closes
+  }
+  lb.addEventListener('pointerup', up); lb.addEventListener('pointercancel', up);
+  lb.querySelector('.vs-lb-x').addEventListener('click', closeLb);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+  window.addEventListener('resize', function () { if (!lb.hidden) fit(); });
+
+  // Bring the search field to the top of the view so the results are never hidden behind toolbars or the keyboard
+  function lift() { setTimeout(function () { try { q.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (e) { q.scrollIntoView(true); } }, 250); }
+  q.addEventListener('focus', lift);
+
   q.addEventListener('input', function () { open = null; formFor = null; render(); });
   list.addEventListener('click', function (e) {
+    var im = e.target.closest('.vs-ph img');
+    if (im) { var fc = im.parentNode.querySelector('figcaption'); openLb(im.currentSrc || im.src, fc ? fc.textContent : ''); return; }
     var a = e.target.closest('[data-act]'); if (!a) return;
     if (a.dataset.act === 'open') { open = open === a.dataset.k ? null : a.dataset.k; formFor = null; render(); }
     else if (a.dataset.act === 'add') { formFor = a.dataset.k; if (a.dataset.k !== 'new') open = a.dataset.k; render(); }
