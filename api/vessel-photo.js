@@ -1,6 +1,9 @@
-// /api/vessel-photo — upload a vessel photo to the ais-photos repo (used by the Vessels section).
-//   POST JSON { code, name, mmsi?, photographer, consent: true, image: <base64 JPEG, already resized in the browser> }
-//   → { ok, mmsi, name, file, credit }
+// /api/vessel-photo — vessel photos for the Vessels section (v1.1)
+//   POST JSON { code, name, mmsi?, listName?, photographer, consent: true, force?, separate?, image: <base64 JPEG> }
+//        → { ok, mmsi, name, file, credit }
+//        409 { error, code: 'name_mismatch' | 'not_in_ais' | 'name_exists' | 'mmsi_required', ... } — checks the user must resolve
+//   GET ?find=NAME   → { candidates: [{ mmsi, name, type, lastSeen }] } from current AIS data
+//   GET ?types=1     → { types: { mmsi: 'Tanker' | ... } } for the vessels in vessels.json
 // The photo is saved as <MMSI>-<n>.jpg (next free number) and added to photos.json and vessels.json.
 //
 // Vercel → Settings → Environment Variables:
@@ -56,22 +59,53 @@ async function updateJson(path, fallback, change, message) {
   throw new Error('Could not update ' + path + ' (busy), try again');
 }
 
-async function lookupMmsi(name) {
+// Current AIS data from the Worker, cached for 2 minutes per server instance
+let aisCache = null, aisTime = 0;
+async function ais() {
+  if (aisCache && Date.now() - aisTime < 120000) return aisCache;
   const r = await fetch(WORKER + '/vessels.csv');
   if (!r.ok) throw new Error('AIS lookup unavailable');
-  const want = norm(name), hits = new Set();
+  const rows = [];
   for (const line of (await r.text()).split('\n').slice(1)) {
-    const m = line.match(/^(\d{9}),"((?:[^"]|"")*)"/);
-    if (m && norm(m[2].replace(/""/g, '"')) === want) hits.add(m[1]);
+    const m = line.match(/^(\d{9}),"((?:[^"]|"")*)",([^,]*),(.*)$/);
+    if (m) rows.push({ mmsi: m[1], name: norm(m[2].replace(/""/g, '"')), type: typeLabel(Number(m[3])), lastSeen: m[4] });
   }
-  if (hits.size === 1) return [...hits][0];
-  if (hits.size > 1) throw new Error('Several vessels named ' + want + ' in AIS data. Enter the MMSI.');
-  throw new Error(want + ' is not in the current AIS data. Enter the MMSI.');
+  aisCache = rows; aisTime = Date.now();
+  return rows;
 }
+function typeLabel(t) {
+  if (t >= 80 && t <= 89) return 'Tanker';
+  if (t >= 70 && t <= 79) return 'Cargo';
+  if ((t >= 60 && t <= 69) || (t >= 40 && t <= 49)) return 'Passenger';
+  if (t === 30) return 'Fishing';
+  if ((t >= 31 && t <= 34) || (t >= 50 && t <= 59) || (t >= 90 && t <= 99)) return 'Service';
+  return t ? 'Other' : '';
+}
+const VALID_MMSI = /^[2-7]\d{8}$/;   // ship station MMSI
+function conflict(res, code, msg, extra) { return res.status(409).json({ error: msg, code, ...(extra || {}) }); }
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
+  if (req.method === 'GET') {
+    try {
+      const q = req.query || {};
+      if (q.find) {
+        const want = norm(q.find), rows = await ais();
+        let c = rows.filter(r => r.name === want);
+        if (!c.length) c = rows.filter(r => r.name.includes(want)).slice(0, 10);
+        return res.status(200).json({ candidates: c });
+      }
+      if (q.types) {
+        const list = (await readJson('vessels.json', [])).data, rows = await ais(), by = {};
+        for (const r of rows) by[r.mmsi] = r.type;
+        const types = {};
+        for (const v of list) if (v.mmsi && by[v.mmsi]) types[v.mmsi] = by[v.mmsi];
+        return res.status(200).json({ types });
+      }
+      return res.status(400).json({ error: 'Unknown request' });
+    } catch (e) { return res.status(400).json({ error: String(e.message || e) }); }
+  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'GET or POST only' });
   if (!process.env.GITHUB_TOKEN || !process.env.UPLOAD_CODE) return res.status(500).json({ error: 'Upload is not configured on the server' });
   try {
     const b = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
@@ -81,16 +115,31 @@ export default async function handler(req, res) {
     if (!photographer) return res.status(400).json({ error: 'Name of photographer is required' });
     let name = norm(b.name).slice(0, 60);
     let mmsi = b.mmsi ? String(b.mmsi).trim() : '';
-    if (mmsi && !/^\d{9}$/.test(mmsi)) return res.status(400).json({ error: 'MMSI must be 9 digits' });
+    if (mmsi && !VALID_MMSI.test(mmsi)) return res.status(400).json({ error: 'MMSI must be 9 digits starting with 2–7' });
+    const listName = b.listName ? norm(b.listName) : null;
     const img = Buffer.from(String(b.image || ''), 'base64');
     if (img.length < 1000 || img[0] !== 0xff || img[1] !== 0xd8) return res.status(400).json({ error: 'Not a JPEG image' });
     if (img.length > MAX_BYTES) return res.status(400).json({ error: 'Image too large' });
 
-    // Resolve MMSI: given → vessel list → live AIS data by name
+    // Resolve the vessel. A vessel already listed with an MMSI uploads as before, with no checks.
     const vessels = (await readJson('vessels.json', [])).data;
-    if (!mmsi) {
-      const v = vessels.find(x => norm(x.name) === name && x.mmsi);
-      mmsi = v ? String(v.mmsi) : await lookupMmsi(name);
+    const listedWithMmsi = !mmsi && vessels.find(x => norm(x.name) === name && x.mmsi);
+    if (listedWithMmsi) mmsi = String(listedWithMmsi.mmsi);
+    else {
+      if (!mmsi) return conflict(res, 'mmsi_required', 'Enter the MMSI (use Find MMSI to look it up).');
+      const byMmsi = vessels.find(x => String(x.mmsi) === mmsi);
+      if (byMmsi) {
+        name = byMmsi.name;   // same MMSI = same vessel, never a duplicate
+      } else {
+        const hit = (await ais()).find(r => r.mmsi === mmsi);
+        if (hit && hit.name !== name)
+          return conflict(res, 'name_mismatch', 'MMSI ' + mmsi + ' is "' + hit.name + '" in AIS, not "' + name + '".', { aisName: hit.name });
+        if (!hit && !b.force)
+          return conflict(res, 'not_in_ais', 'MMSI ' + mmsi + ' is not in the current AIS data. Check the number.');
+        const sameName = vessels.find(x => norm(x.name) === name && x.mmsi && String(x.mmsi) !== mmsi);
+        if (sameName && !b.separate)
+          return conflict(res, 'name_exists', 'A vessel named ' + name + ' already exists (MMSI ' + sameName.mmsi + ').', { existing: { name: sameName.name, mmsi: String(sameName.mmsi) } });
+      }
     }
     if (!name) { const v = vessels.find(x => String(x.mmsi) === mmsi); name = v ? v.name : 'MMSI ' + mmsi; }
 
@@ -117,8 +166,8 @@ export default async function handler(req, res) {
     await updateJson('vessels.json', [], d => {
       const byM = d.find(x => String(x.mmsi) === mmsi);
       if (byM) return null;
-      const byN = d.find(x => norm(x.name) === name && !x.mmsi);
-      if (byN) byN.mmsi = mmsi; else d.push({ name, mmsi });
+      const byN = d.find(x => !x.mmsi && (norm(x.name) === name || (listName && norm(x.name) === listName)));
+      if (byN) { byN.mmsi = mmsi; byN.name = name; } else d.push({ name, mmsi });
       d.sort((a, c) => a.name.localeCompare(c.name));
       return d;
     }, 'vessels.json: ' + name + ' ' + mmsi);
