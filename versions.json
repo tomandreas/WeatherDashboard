@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 7,
+   "current": 9,
    "versions": [
     {
      "v": 1,
@@ -65,6 +65,24 @@
      "note": "Vessels v1.3: live traffic map (OpenStreetMap + OpenSeaMap, coloured ship icons rotated to course, grey 5 px vectors and turn curves, layer panel with categories and overlays, tap a vessel for details and photos). Vessel card shows position age, SOG/COG, destination and ETA, plus a mini-map that expands to the full map. Wide screens: Vessels is full width below TAF and LOOME (the page scrolls down to it); phones keep the Vessels tab, with the map opening full screen. Requires AIS Worker 1.5 (/live.json).",
      "bytes": 4478956,
      "sha": "3cd86d330a2b7f26be5d172eb7c1bca6a9695bcccef7572642d3b16d0cb5ecea"
+    },
+    {
+     "v": 8,
+     "label": "1.8",
+     "file": "index.v8.html",
+     "archived": "2026-10-27",
+     "note": "Vessels v1.4: opening a vessel in the search (tap, or Enter with one match) centres the live map on it, rings it and opens its info box (full-screen map on phones). Vessels without an MMSI are looked up by exact name in AIS for position and map focus. Info box restyled (dark, readable; light theme supported). Requires AIS Worker 1.7 (/live.json?name=).",
+     "bytes": 4481798,
+     "sha": "e3851e7e625afefcddc6fdf1d5c645dd91caf527a549cc8867c4075267a5a651"
+    },
+    {
+     "v": 9,
+     "label": "1.9",
+     "file": "index.v9.html",
+     "archived": "2026-10-27",
+     "note": "Wide screens scroll as one page (fixes iPad scrolling). 'Vessels ↓' button next to the flight-rules switch. Vessels v1.5: heading 'Vessel Information'; map refresh every 30 s; ship icons drawn on canvas from zoom 7; vessel names + speed from zoom 9 (switchable); 2 px vectors; Stations layer (dark blue stars with names); ETA to point (dynamic line + ETA label, kept until removed); station ETA for tankers, rigs and heavy-lift (Mongstad → Holmengrå, Sture → Fedje vest, else nearest); Save MMSI for listed vessels found by name in AIS. Requires api/vessel-photo.js with the setMmsi action.",
+     "bytes": 4493030,
+     "sha": "cfe356da5e2c5c4d4e73a9ce922c6c915a10317057a49d89187b9dfabfabc983"
     }
    ]
   }
