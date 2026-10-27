@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 6,
+   "current": 7,
    "versions": [
     {
      "v": 1,
@@ -56,6 +56,15 @@
      "note": "Version number in the header (LOOME footer line removed). TAF Timeline v1.26: Edit aerodromes has ✕ to remove (with Undo) and the add/search field. Vessels v1.2: MMSI required only for vessels without one, Find MMSI from AIS with picker, MMSI format check (2–7 + 8 digits), hard stop on name/MMSI mismatch with Use AIS name, Upload anyway when MMSI not in AIS, no duplicate MMSIs, Add as separate / Go to existing for same name, vessel type in results. Requires api/vessel-photo.js v1.1.",
      "bytes": 4459829,
      "sha": "09250901e92ad3cf6dd6027e5cdaefff3487ce2c856ea1fabc68ba4cee3b8d8e"
+    },
+    {
+     "v": 7,
+     "label": "1.7",
+     "file": "index.v7.html",
+     "archived": "2026-10-27",
+     "note": "Vessels v1.3: live traffic map (OpenStreetMap + OpenSeaMap, coloured ship icons rotated to course, grey 5 px vectors and turn curves, layer panel with categories and overlays, tap a vessel for details and photos). Vessel card shows position age, SOG/COG, destination and ETA, plus a mini-map that expands to the full map. Wide screens: Vessels is full width below TAF and LOOME (the page scrolls down to it); phones keep the Vessels tab, with the map opening full screen. Requires AIS Worker 1.5 (/live.json).",
+     "bytes": 4478956,
+     "sha": "3cd86d330a2b7f26be5d172eb7c1bca6a9695bcccef7572642d3b16d0cb5ecea"
     }
    ]
   }

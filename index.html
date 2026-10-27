@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.6">
+<meta name="page-version" content="1.7">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -71,6 +71,52 @@ html[data-wd-theme=light] #taf-root{--bg:#f3f4f6;--surface:#fff;--surface2:#f0f2
 html[data-wd-theme=light] #taf-root .btn.primary{background:#e8a020;border-color:#e8a020;color:#14100a}
 html[data-wd-theme=light] #taf-root .warn{color:#27535c;border-color:#b9d3d6;background:#e8f2f3}
 html[data-wd-theme=light] #taf-root .warn.bad{color:#8e1c1c;border-color:#e9a7a7;background:#fbe5e5}
+/* Vessels v1.3 (search, upload with checks, photo viewer, live map) */
+#ves-wide{display:none}
+@media (min-width:1100px){
+  html,body{height:auto;overflow-x:hidden;overflow-y:auto}
+  .wd-scroll{overscroll-behavior-y:auto}
+  #ves-wide{display:block;border-top:1px solid #1d2432;background:#0b0e14}
+  #ves-wide #ves-root{max-width:none;padding:18px 24px 40px}
+  #ves-root .vs-cols{display:grid;grid-template-columns:minmax(340px,460px) 1fr;gap:22px;align-items:start}
+  #ves-root .vs-right{position:sticky;top:12px}
+  #ves-wide #ves-root #vsMap{height:calc(100vh - 120px);min-height:420px}
+  #ves-root .vs-x{display:none}
+}
+#ves-root .vs-right{margin-top:14px}
+#ves-root .vs-mapwrap{background:#121722;border:1px solid #1d2432;border-radius:10px;overflow:hidden}
+#ves-root .vs-maphead{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid #1d2432}
+#ves-root .vs-mt{font:19px/1 'LN Display','Bebas Neue','Arial Narrow',Impact,sans-serif;letter-spacing:.05em}#ves-root .vs-mt b{font-weight:400;color:#e8a020}
+#ves-root .vs-ms{flex:1;color:#7d8799;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ves-root .vs-mb{background:#0b0e14;border:1px solid #2a3242;border-radius:8px;color:#d7dde8;font:12px 'LN Mono','IBM Plex Mono',monospace;padding:6px 10px;cursor:pointer}
+#ves-root .vs-mapbox{position:relative}
+#ves-root #vsMap{height:60vh;background:#aad3df}
+#ves-root .vs-layers{position:absolute;right:10px;top:10px;z-index:500;background:rgba(18,23,34,.96);border:1px solid #2a3242;border-radius:10px;padding:8px 12px;font-size:12px;display:none;min-width:200px}
+#ves-root .lay-open .vs-layers{display:block}
+#ves-root .vs-layers h4{margin:6px 0 4px;font:13px 'LN Display','Bebas Neue',sans-serif;letter-spacing:.08em;color:#7d8799;font-weight:400}
+#ves-root .vs-layers label{display:flex;align-items:center;gap:8px;margin:5px 0;cursor:pointer;color:#d7dde8}
+#ves-root .vs-layers input{width:16px;height:16px;accent-color:#e8a020;margin:0}
+#ves-root .vs-layers i{width:9px;height:9px;border-radius:50%;display:inline-block}
+#ves-root .vs-mapwrap.full{position:fixed;inset:0;z-index:900;border-radius:0;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+#ves-root .vs-mapwrap.full .vs-mapbox{flex:1}#ves-root .vs-mapwrap.full #vsMap{height:100%}
+#ves-root .vs-x{display:none}#ves-root .vs-mapwrap.full .vs-x{display:inline-block}
+body.vs-noscroll{overflow:hidden}
+.vs-ic{background:none;border:none}
+.vs-pop{font:12px/1.5 'LN Mono','IBM Plex Mono',monospace;color:#d7dde8}.vs-pop b{font-size:13px}.vs-pop span{color:#7d8799}.vs-pop a{color:#e8a020;text-decoration:none}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#121722;border:1px solid #2a3242;color:#d7dde8}
+#ves-root .vs-live{margin:0 0 10px}
+#ves-root .vs-kv{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:2px 0 10px;font-size:12px}
+#ves-root .vs-kv span{display:block;color:#7d8799;font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+#ves-root .vs-mini{position:relative;height:160px;border-radius:8px;overflow:hidden;border:1px solid #2a3242;background:#aad3df}
+#ves-root .vs-exp{position:absolute;right:6px;bottom:6px;z-index:500;background:rgba(11,14,20,.88);border:1px solid #2a3242;border-radius:6px;color:#d7dde8;font:11px 'LN Mono','IBM Plex Mono',monospace;padding:4px 8px;cursor:pointer}
+html[data-wd-theme=light] #ves-wide{background:#f3f4f6;border-top-color:#cfd5de}
+html[data-wd-theme=light] #ves-root .vs-mapwrap{background:#fff;border-color:#cfd5de}
+html[data-wd-theme=light] #ves-root .vs-maphead{border-bottom-color:#cfd5de}
+html[data-wd-theme=light] #ves-root .vs-mt b{color:#27535c}
+html[data-wd-theme=light] #ves-root .vs-mb{background:#fff;border-color:#b7bfcb;color:#0f1419}
+html[data-wd-theme=light] #ves-root .vs-layers{background:rgba(255,255,255,.97);border-color:#cfd5de}
+html[data-wd-theme=light] #ves-root .vs-layers label{color:#0f1419}
+html[data-wd-theme=light] #ves-root .vs-kv span,html[data-wd-theme=light] #ves-root .vs-ms{color:#454f5e}
 /* Vessels v1.2 (ais-photos search, upload with checks, photo viewer) */
 #ves-root .vs-mrow{display:flex;gap:8px}#ves-root .vs-mrow input{flex:1}
 #ves-root .vs-cand{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#7d8799}
@@ -790,7 +836,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 </head>
 <body>
 <div class="wd" id="wd" data-tab="taf">
-<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.6 with TAF Timeline v1.26, LOOME Night Ops v1.8 and Vessels v1.2">Weather<b>Dashboard</b><span class="wd-v">v1.6</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
+<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.7 with TAF Timeline v1.26, LOOME Night Ops v1.8 and Vessels v1.3">Weather<b>Dashboard</b><span class="wd-v">v1.7</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
 <div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button><button role="tab" data-tab="ves" aria-controls="pane-ves" aria-selected="false" tabindex="-1">Vessels</button></div>
 <section class="wd-pane" id="pane-taf" role="tabpanel" aria-label="TAF Timeline"><div class="wd-scroll" id="scroll-taf"><div id="taf-root">
 
@@ -904,6 +950,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 </div></div></section>
 <section class="wd-pane" id="pane-ves" role="tabpanel" aria-label="Vessels"><div class="wd-scroll" id="scroll-ves"><div id="ves-root"></div></div></section>
 </div>
+<div id="ves-wide"></div>
 <script>
 // Two apps share this page. Their own on-screen Back buttons handle their pages, so the browser history is left alone.
 try { history.pushState = function () { throw new Error('history off in WeatherDashboard'); }; } catch (e) {}
@@ -5035,6 +5082,8 @@ function init(){
 
 init();
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 /* Vessels v1.0: search the curated vessel list, show photos from the ais-photos repo, upload new photos. */
 (function () {
@@ -5050,10 +5099,198 @@ init();
   root.innerHTML =
     '<h2>Vessel <b>Photos</b></h2>' +
     '<div class="vs-stat" id="vsStat">Loading vessel list…</div>' +
+    '<div class="vs-cols"><div class="vs-left">' +
     '<input type="search" id="vsQ" placeholder="Search vessel name or MMSI" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
     '<div class="vs-list" id="vsList"></div>' +
-    '<div class="vs-hint">Photos appear in the ForeFlight AIS layer within about 10 minutes of upload.</div>';
+    '<div class="vs-hint">Photos appear in the ForeFlight AIS layer within a few minutes of upload.</div></div>' +
+    '<div class="vs-right" id="vsRight"></div></div>';
   var q = document.getElementById('vsQ'), list = document.getElementById('vsList'), stat = document.getElementById('vsStat');
+  var mq = window.matchMedia('(max-width:1099px)');
+
+  // ======================= Live map (Vessels v1.3) =======================
+  var WORKER = 'https://foreflight-ais.tom-ostrem-airlift-github.workers.dev';
+  var COL = { tanker: '#e04848', rig: '#e04848', heavylift: '#e04848', cargo: '#4cc26a', passenger: '#4ea8de', service: '#e8a020', fishing: '#b07cf0', other: '#d8dde6' };
+  var STALE_COL = '#808690', LINE_COL = '#3a3f47';
+  var GROUP = { tanker: 'tanker', rig: 'righeavy', heavylift: 'righeavy', cargo: 'cargo', service: 'service', passenger: 'passenger', fishing: 'fishother', other: 'fishother' };
+  var LAYERS = [['tanker', 'Tankers', COL.tanker], ['righeavy', 'Rigs & heavy-lift', ''], ['cargo', 'Cargo', COL.cargo], ['service', 'Service / offshore', COL.service], ['passenger', 'Passenger', COL.passenger], ['fishother', 'Fishing / other', COL.other]];
+  var OVER = [['vectors', 'Vectors & turn curves'], ['seamarks', 'Seamarks (OpenSeaMap)'], ['photos', 'Only vessels with photos']];
+  var lay = { tanker: 1, righeavy: 1, cargo: 1, service: 1, passenger: 1, fishother: 1, vectors: 1, seamarks: 1, photos: 0 };
+  try { var ls = JSON.parse(localStorage.getItem('ves.layers') || 'null'); if (ls) for (var k in ls) lay[k] = ls[k]; } catch (e) {}
+  var map = null, seaLayer = null, gIcons = null, gLines = null, live = [], liveT = '', sel = null, liveBy = {}, mini = null, lastFetch = 0, inView = false, timer = null;
+
+  function typeLabel(t) {
+    if (t >= 80 && t <= 89) return 'Tanker'; if (t >= 70 && t <= 79) return 'Cargo';
+    if ((t >= 60 && t <= 69) || (t >= 40 && t <= 49)) return 'Passenger'; if (t === 30) return 'Fishing';
+    if ((t >= 31 && t <= 34) || (t >= 50 && t <= 59) || (t >= 90 && t <= 99)) return 'Service'; return t ? 'Other' : '';
+  }
+  function clsLabel(v) { return v.c === 'rig' ? 'Rig / drilling unit' : v.c === 'heavylift' ? 'Heavy-lift crane vessel' : (typeLabel(v.t) || 'Other'); }
+  function moving(v) { return v.s !== null && v.s >= 0.5; }
+  function dirOf(v) { return moving(v) ? (v.co !== null ? v.co : v.h) : null; }
+  function stale(v) { return v.a > 30; }
+
+  // ---------- geometry (same rules as the ForeFlight layer) ----------
+  function dest(lat, lon, brg, nm) {
+    var R = 3440.065, d = nm / R, b = brg * Math.PI / 180, f1 = lat * Math.PI / 180, l1 = lon * Math.PI / 180;
+    var f2 = Math.asin(Math.sin(f1) * Math.cos(d) + Math.cos(f1) * Math.sin(d) * Math.cos(b));
+    var l2 = l1 + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(f1), Math.cos(d) - Math.sin(f1) * Math.sin(f2));
+    return [f2 * 180 / Math.PI, l2 * 180 / Math.PI];
+  }
+  function vectorLines(v) {   // 30 min straight vector, ticks at 10/20 min, arrowhead at 30
+    var L = v.s * 0.5, tick = L * 0.07, barb = L * 0.12, c = v.co, p30 = dest(v.la, v.lo, c, L), out = [[[v.la, v.lo], p30]];
+    [1 / 3, 2 / 3].forEach(function (f) { var p = dest(v.la, v.lo, c, L * f); out.push([dest(p[0], p[1], c - 90, tick), dest(p[0], p[1], c + 90, tick)]); });
+    out.push([dest(p30[0], p30[1], c + 155, barb), p30, dest(p30[0], p30[1], c + 205, barb)]);
+    return out;
+  }
+  function curveLines(v) {    // 6 min constant-rate turn, ticks at 2/4 min, arrowhead at 6
+    var STEP = 0.2, L = v.s * 6 / 60, tick = L * 0.06, barb = L * 0.11, p = [v.la, v.lo], path = [p], out = [], h = v.co;
+    for (var i = 1; i <= 30; i++) {
+      p = dest(p[0], p[1], v.co + v.r * (i - 0.5) * STEP, v.s * STEP / 60); path.push(p); h = v.co + v.r * i * STEP;
+      if (i === 10 || i === 20) out.push([dest(p[0], p[1], h - 90, tick), dest(p[0], p[1], h + 90, tick)]);
+    }
+    out.unshift(path); out.push([dest(p[0], p[1], h + 155, barb), p, dest(p[0], p[1], h + 205, barb)]);
+    return out;
+  }
+  function iconSvg(v, size) {
+    var st = stale(v), col = st ? STALE_COL : (COL[v.c] || COL.other), d = dirOf(v), S = size || 28, h = S / 2;
+    var body;
+    if (v.c === 'rig') body = '<rect x="-6" y="-6" width="12" height="12" fill="' + col + '" stroke="#0a0e14" stroke-width="1.4"/><path d="M-4,-4 L4,4 M4,-4 L-4,4" stroke="#0a0e14" stroke-width="1.4"/>';
+    else if (v.c === 'heavylift') body = '<path d="M0,-8 L8,0 L0,8 L-8,0Z" fill="' + col + '" stroke="#0a0e14" stroke-width="1.4"/><circle r="2.4" fill="#0a0e14"/>';
+    else if (d !== null) body = '<g transform="rotate(' + Math.round(d) + ')"><path d="M0,-12 L5,-4 L5,9 L-5,9 L-5,-4Z" fill="' + col + '" stroke="#0a0e14" stroke-width="1.3"/></g>';
+    else body = '<circle r="5" fill="' + col + '" stroke="#0a0e14" stroke-width="1.3"/>';
+    var ring = sel === v.m ? '<circle r="13" fill="none" stroke="#e8a020" stroke-width="2.5" stroke-dasharray="4 3"/>' : '';
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + S + '" height="' + S + '" viewBox="' + (-h) + ' ' + (-h) + ' ' + S + ' ' + S + '">' + ring + body + '</svg>';
+  }
+  function shown(v) {
+    if (!lay[GROUP[v.c] || 'fishother']) return false;
+    if (lay.photos && !(data.photos[String(v.m)] || []).length) return false;
+    return true;
+  }
+  function addVessel(v, iconsGrp, linesGrp, z, renderer) {
+    if (z >= 9) {
+      var mk = L.marker([v.la, v.lo], { icon: L.divIcon({ className: 'vs-ic', html: iconSvg(v, 30), iconSize: [30, 30], iconAnchor: [15, 15] }), keyboard: false });
+      mk.on('click', function () { pick(v); }); iconsGrp.addLayer(mk);
+      if (lay.vectors && moving(v) && !stale(v) && v.co !== null)
+        (v.tc && v.r !== null ? curveLines(v) : vectorLines(v)).forEach(function (seg) { linesGrp.addLayer(L.polyline(seg, { color: LINE_COL, weight: 5, opacity: 1, lineCap: 'round', lineJoin: 'round', renderer: renderer, interactive: false })); });
+    } else {
+      var cm = L.circleMarker([v.la, v.lo], { radius: sel === v.m ? 6 : 3.5, color: '#0a0e14', weight: 1, fillColor: stale(v) ? STALE_COL : (COL[v.c] || COL.other), fillOpacity: 1, renderer: renderer });
+      cm.on('click', function () { pick(v); }); iconsGrp.addLayer(cm);
+    }
+  }
+
+  // ---------- big map ----------
+  function initMap() {
+    if (map || !window.L) return;
+    map = L.map('vsMap', { center: [61.5, 4.5], zoom: 7, preferCanvas: true, worldCopyJump: true });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap' }).addTo(map);
+    seaLayer = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', { maxZoom: 18, attribution: 'OpenSeaMap' });
+    if (lay.seamarks) seaLayer.addTo(map);
+    map.attributionControl.addAttribution('AIS: Kystverket/BarentsWatch');
+    gLines = L.layerGroup().addTo(map); gIcons = L.layerGroup().addTo(map);
+    var deb; map.on('moveend', function () { clearTimeout(deb); deb = setTimeout(function () { loadLive(); }, 350); });
+    map.on('click', function () { map.closePopup(); });
+    loadLive();
+  }
+  function bboxOf(b) { var p = 0.25, la = (b.getNorth() - b.getSouth()) * p, lo = (b.getEast() - b.getWest()) * p;
+    return [Math.max(-90, b.getSouth() - la), Math.max(-180, b.getWest() - lo), Math.min(90, b.getNorth() + la), Math.min(180, b.getEast() + lo)].map(function (x) { return x.toFixed(3); }).join(','); }
+  function loadLive() {
+    if (!map) return;
+    lastFetch = Date.now();
+    fetch(WORKER + '/live.json?bbox=' + bboxOf(map.getBounds())).then(function (r) { return r.json(); }).then(function (j) {
+      live = j.vessels || []; liveT = j.t || ''; drawMap();
+      document.getElementById('vsMapStat').textContent = 'updated ' + (liveT ? liveT.slice(11, 19) + 'Z' : '–') + ' · ' + live.length + ' vessels';
+    }).catch(function () { document.getElementById('vsMapStat').textContent = 'AIS data not available'; });
+  }
+  function drawMap() {
+    if (!map) return;
+    gIcons.clearLayers(); gLines.clearLayers();
+    var z = map.getZoom(), b = map.getBounds().pad(0.1), n = 0, r = L.canvas({ padding: 0.3 });
+    live.forEach(function (v) { if (!shown(v) || !b.contains([v.la, v.lo]) || n > 1500) return; n++; addVessel(v, gIcons, gLines, z, r); });
+  }
+  function popupHtml(v) {
+    var hasP = (data.photos[String(v.m)] || []).length;
+    return '<div class="vs-pop"><b>' + esc(v.n) + '</b> <span>' + esc(clsLabel(v)) + ' · ' + v.m + '</span><br>' +
+      'SOG ' + (v.s === null ? '–' : v.s.toFixed(1) + ' kt') + ' · COG ' + (v.co === null ? '–' : Math.round(v.co) + '°') + ' · ROT ' + (v.r === null ? '–' : Math.abs(v.r).toFixed(1) + '°/min' + (v.r > 0.4 ? ' stbd' : v.r < -0.4 ? ' port' : '')) + '<br>' +
+      (v.d || v.e ? 'Dest ' + esc(v.d || '–') + (v.e ? ' · ETA ' + esc(v.e) : '') + '<br>' : '') +
+      '<span>Position age ' + v.a + ' min</span><br><a href="#" data-pop="' + v.m + '">' + (hasP ? 'Show photos ›' : 'Open in list ›') + '</a></div>';
+  }
+  function pick(v) {
+    sel = v.m; drawMap();
+    L.popup({ offset: [0, -8], maxWidth: 280 }).setLatLng([v.la, v.lo]).setContent(popupHtml(v)).openOn(map);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-pop]'); if (!a) return; e.preventDefault();
+    var m = a.dataset.pop, v = data.vessels.filter(function (x) { return String(x.mmsi) === m; })[0], lv = live.filter(function (x) { return String(x.m) === m; })[0];
+    closeFull(); q.value = v ? v.name : (lv ? lv.n : m); open = v ? m : null; formFor = null; render();
+    if (!v && lv) { formFor = 'new'; }
+    q.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  });
+  function openOnMap(m, la, lo) {
+    var wrap = document.getElementById('vsMapWrap');
+    if (mq.matches) { wrap.classList.add('full'); document.body.classList.add('vs-noscroll'); }
+    else wrap.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    initMap(); sel = Number(m);
+    setTimeout(function () { map.invalidateSize(); map.setView([la, lo], 12); }, 60);
+  }
+  function closeFull() { var w = document.getElementById('vsMapWrap'); if (w.classList.contains('full')) { w.classList.remove('full'); document.body.classList.remove('vs-noscroll'); setTimeout(function () { map && map.invalidateSize(); }, 60); } }
+
+  // ---------- layer panel ----------
+  function layersHtml() {
+    function row(k, t, c) { return '<label><input type="checkbox" data-lay="' + k + '"' + (lay[k] ? ' checked' : '') + '><span>' + esc(t) + '</span>' + (c ? '<i style="background:' + c + '"></i>' : '') + '</label>'; }
+    return '<h4>Layers</h4>' + LAYERS.map(function (x) { return row(x[0], x[1], x[2]); }).join('') + '<h4>Overlays</h4>' + OVER.map(function (x) { return row(x[0], x[1]); }).join('');
+  }
+  function mapHtml() {
+    return '<div class="vs-mapwrap" id="vsMapWrap"><div class="vs-maphead"><span class="vs-mt">Live <b>Traffic</b></span><span class="vs-ms" id="vsMapStat"></span>' +
+      '<button class="vs-mb" id="vsLayBtn">Layers</button><button class="vs-mb vs-x" id="vsMapX" aria-label="Close map">✕</button></div>' +
+      '<div class="vs-mapbox"><div id="vsMap"></div><div class="vs-layers" id="vsLayers">' + layersHtml() + '</div></div></div>';
+  }
+
+  // ---------- vessel card: live position + mini-map ----------
+  function liveBlock(v) {
+    if (!v.mmsi) return '';
+    var c = liveBy[v.mmsi];
+    if (!c || (c.pending && !c.v)) return '<div class="vs-live" data-live="' + esc(v.mmsi) + '"><div class="vs-none">Loading position…</div></div>';
+    if (!c.v) return '<div class="vs-live"><div class="vs-none">Not in current AIS data.</div></div>';
+    var x = c.v;
+    return '<div class="vs-live"><div class="vs-kv">' +
+      '<div><span>Position age</span>' + x.a + ' min</div><div><span>SOG / COG</span>' + (x.s === null ? '–' : x.s.toFixed(1) + ' kt') + ' · ' + (x.co === null ? '–' : Math.round(x.co) + '°') + '</div>' +
+      '<div><span>Destination</span>' + esc(x.d || '–') + '</div><div><span>ETA</span>' + esc(x.e || '–') + '</div></div>' +
+      '<div class="vs-mini" id="vsMini"><button class="vs-exp" data-act="expand" data-m="' + x.m + '" data-la="' + x.la + '" data-lo="' + x.lo + '">⤢ Expand</button></div></div>';
+  }
+  function fetchLive(m) {
+    if (liveBy[m] && (liveBy[m].pending || Date.now() - liveBy[m].t < 60000)) return;
+    liveBy[m] = { t: Date.now(), pending: true, v: liveBy[m] ? liveBy[m].v : null };
+    fetch(WORKER + '/live.json?mmsi=' + encodeURIComponent(m)).then(function (r) { return r.json(); }).then(function (j) {
+      liveBy[m] = { t: Date.now(), v: (j.vessels || [])[0] || null }; render();
+    }).catch(function () { liveBy[m] = { t: Date.now(), v: null }; render(); });
+  }
+  function afterRender() {
+    if (mini) { mini.remove(); mini = null; }
+    var el = document.getElementById('vsMini'); if (!el || !window.L) return;
+    var b = el.querySelector('[data-act=expand]'), m = Number(b.dataset.m), v = (liveBy[m] || {}).v; if (!v) return;
+    mini = L.map(el, { center: [v.la, v.lo], zoom: 11, zoomControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, touchZoom: false, attributionControl: false });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(mini);
+    var keep = sel; sel = m; addVessel(v, mini, mini, 11, L.canvas()); sel = keep;
+    el.appendChild(b);
+    setTimeout(function () { if (mini) { mini.invalidateSize(); mini.setView([v.la, v.lo], 11); } }, 50);
+  }
+
+  document.getElementById('vsRight').innerHTML = mapHtml();
+  document.getElementById('vsLayers').addEventListener('change', function (e) {
+    var k = e.target.dataset.lay; if (!k) return; lay[k] = e.target.checked ? 1 : 0;
+    try { localStorage.setItem('ves.layers', JSON.stringify(lay)); } catch (x) {}
+    if (k === 'seamarks' && map) { if (lay.seamarks) seaLayer.addTo(map); else map.removeLayer(seaLayer); }
+    drawMap();
+  });
+  document.getElementById('vsLayBtn').onclick = function () { document.getElementById('vsMapWrap').classList.toggle('lay-open'); };
+  document.getElementById('vsMapX').onclick = closeFull;
+  // Start the big map when it scrolls into view; refresh every 60 s while visible
+  if (window.IntersectionObserver) new IntersectionObserver(function (es) { inView = es[es.length - 1].isIntersecting; if (inView) { initMap(); if (map) map.invalidateSize(); } }, { rootMargin: '200px' }).observe(document.getElementById('vsMapWrap'));
+  else initMap();
+  setInterval(function () {
+    var full = document.getElementById('vsMapWrap').classList.contains('full');
+    if (map && (inView || full) && document.visibilityState === 'visible' && Date.now() - lastFetch > 55000) loadLive();
+    if (open && /^\d{9}$/.test(String(open)) && liveBy[open] && !liveBy[open].pending && Date.now() - liveBy[open].t > 60000 && document.visibilityState === 'visible') fetchLive(open);
+  }, 5000);
 
   function load() {
     var t = '?t=' + Date.now();
@@ -5088,7 +5325,8 @@ init();
       var ph = photosOf(v), k = key(v);
       var body = '';
       if (open === k) {
-        body = '<div class="vs-body">' + (ph.length ? ph.map(function (p) {
+        if (v.mmsi) fetchLive(v.mmsi);
+        body = '<div class="vs-body">' + liveBlock(v) + (ph.length ? ph.map(function (p) {
           return '<figure class="vs-ph"><img loading="lazy" src="' + esc(p.src || BASE + p.file) + '" alt="' + esc(v.name) + '">' +
             '<figcaption>' + esc([p.caption, p.credit].filter(Boolean).join(' · ')) + '</figcaption></figure>';
         }).join('') : '<div class="vs-none">No photo yet.</div>') +
@@ -5107,6 +5345,7 @@ init();
         (formFor === 'new' ? form(nv, true) : '<button class="vs-btn ghost" data-act="add" data-k="new">Upload photo for new vessel</button>') + '</div></div>';
     }
     list.innerHTML = h;
+    afterRender();
   }
 
   function form(v, isNew) {
@@ -5276,6 +5515,7 @@ init();
     else if (a.dataset.act === 'add') { formFor = a.dataset.k; if (a.dataset.k !== 'new') open = a.dataset.k; render(); }
     else if (a.dataset.act === 'send') send(a.closest('.vs-form'), a);
     else if (a.dataset.act === 'find') findMmsi(a.closest('.vs-form'));
+    else if (a.dataset.act === 'expand') openOnMap(a.dataset.m, Number(a.dataset.la), Number(a.dataset.lo));
     else if (a.dataset.act === 'pick') {
       var f = a.closest('.vs-form'); f.querySelector('.f-mmsi').value = a.dataset.m;
       if (f.querySelector('.f-name')) f.querySelector('.f-name').value = a.dataset.v; else f.dataset.name = a.dataset.v;
@@ -5293,12 +5533,12 @@ init();
   });
   list.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.vs-head[data-act]')) { e.preventDefault(); e.target.click(); } });
 
-  // PC: below the TAF timeline. Phone/tablet (< 1100 px): its own tab.
-  var mq = window.matchMedia('(max-width:1099px)'), wd = document.getElementById('wd');
+  // PC / wide screens: full width below TAF and LOOME (the page scrolls down to it). Phone/tablet (< 1100 px): its own tab.
   function place() {
-    var target = document.getElementById(mq.matches ? 'scroll-ves' : 'scroll-taf');
+    var target = document.getElementById(mq.matches ? 'scroll-ves' : 'ves-wide');
     if (root.parentNode !== target) target.appendChild(root);
-    wd.classList.toggle('ves-docked', !mq.matches);
+    if (!mq.matches) closeFull();
+    setTimeout(function () { map && map.invalidateSize(); }, 80);
   }
   if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
   place();
