@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.9">
+<meta name="page-version" content="1.10">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -856,7 +856,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 </head>
 <body>
 <div class="wd" id="wd" data-tab="taf">
-<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.9 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.5">Weather<b>Dashboard</b><span class="wd-v">v1.9</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
+<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.10 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.6">Weather<b>Dashboard</b><span class="wd-v">v1.10</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
 <div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button><button role="tab" data-tab="ves" aria-controls="pane-ves" aria-selected="false" tabindex="-1">Vessels</button></div>
 <section class="wd-pane" id="pane-taf" role="tabpanel" aria-label="TAF Timeline"><div class="wd-scroll" id="scroll-taf"><div id="taf-root">
 
@@ -5140,6 +5140,12 @@ init();
     { n: 'Skudefjorden', la: 59.033, lo: 5.167 }, { n: 'Crew Change Bergen', la: 60.22883, lo: 4.51117 },
     { n: 'Ona Pilotboarding', la: 62.933, lo: 6.45 }, { n: 'Fruholmen', la: 71.092, lo: 23.45 },
     { n: 'Crew Change Hammerfest', la: 71.1505, lo: 23.07967 }];
+  // Destination → station (port name or UN/LOCODE, spaces/hyphens ignored)
+  var DEST_MAP = [
+    { re: /MONGSTAD|NOMON/, st: 0, port: 'Mongstad' },          // → Holmengrå
+    { re: /STURE|NOSTU/, st: 1, port: 'Sture' },                // → Fedje vest
+    { re: /K[AÅ]RST[OØ]|NOKAR/, st: 2, port: 'Kårstø' },        // → Skudefjorden
+    { re: /MELK[OØ]YA|NOMLK/, st: 5, port: 'Melkøya' }];        // → Fruholmen
   var STAR = '#1e3a8a', ICON_ZOOM = 7, LABEL_ZOOM = 9, VEC_ZOOM = 8;
   var etaPts = {}, etaCache = {}, pendingEta = null, gEta = null, gStations = null;
   try { etaPts = JSON.parse(localStorage.getItem('ves.eta') || '{}') || {}; } catch (e) {}
@@ -5182,19 +5188,32 @@ init();
     var r = Math.PI / 180, a = Math.sin((la2 - la1) * r / 2), b = Math.sin((lo2 - lo1) * r / 2);
     return 2 * 3440.065 * Math.asin(Math.sqrt(a * a + Math.cos(la1 * r) * Math.cos(la2 * r) * b * b));
   }
+  // Norwegian local time (Europe/Oslo, summer/winter time automatic)
+  var LT_FMT = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Oslo', hour: '2-digit', minute: '2-digit', hour12: false });
+  var LTD_FMT = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Oslo', day: 'numeric', month: 'short' });
+  function lt(t) { return LT_FMT.format(t) + ' LT'; }
   function etaStr(dist, v) {
     if (v.s === null || v.s < 0.5) return '–';
     var min = dist / v.s * 60, t = new Date(Date.now() + min * 60000);
-    var hh = String(t.getUTCHours()).padStart(2, '0') + ':' + String(t.getUTCMinutes()).padStart(2, '0') + 'Z';
-    return hh + ' (' + (min < 90 ? Math.round(min) + ' min' : Math.floor(min / 60) + ' h ' + Math.round(min % 60) + ' min') + ')';
+    return lt(t) + ' (' + (min < 90 ? Math.round(min) + ' min' : Math.floor(min / 60) + ' h ' + Math.round(min % 60) + ' min') + ')';
+  }
+  // AIS ETA arrives as e.g. "27 Oct 14:30Z" (UTC) → "27 Oct 15:30 LT"
+  function aisEta(e) {
+    if (!e) return null;
+    var M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var m = String(e).match(/^(\d{1,2}) ([A-Z][a-z]{2})(?: (\d\d):(\d\d)Z)?$/); if (!m) return e;
+    var mo = M.indexOf(m[2]); if (mo < 0) return e;
+    var now = new Date(), y = now.getUTCFullYear();
+    var t = new Date(Date.UTC(y, mo, +m[1], m[3] ? +m[3] : 12, m[4] ? +m[4] : 0));
+    if (t - now < -183 * 864e5) t = new Date(Date.UTC(y + 1, mo, +m[1], m[3] ? +m[3] : 12, m[4] ? +m[4] : 0));   // around New Year
+    return LTD_FMT.format(t) + (m[3] ? ' ' + lt(t) : '');
   }
   // Tankers, rigs and heavy-lift: destination Mongstad → Holmengrå, Sture → Fedje vest, otherwise the nearest station
   function stationFor(v) {
     if (v.c !== 'tanker' && v.c !== 'rig' && v.c !== 'heavylift') return null;
-    var d = String(v.d || '').toUpperCase(), st = null, why = '';
-    if (/MONGSTAD/.test(d)) { st = STATIONS[0]; why = ' (dest Mongstad)'; }
-    else if (/STURE/.test(d)) { st = STATIONS[1]; why = ' (dest Sture)'; }
-    else STATIONS.forEach(function (x) { if (!st || nm(v.la, v.lo, x.la, x.lo) < nm(v.la, v.lo, st.la, st.lo)) st = x; });
+    var d = String(v.d || '').toUpperCase().replace(/[\s\-_.,\/>]/g, ''), st = null, why = '';
+    for (var i = 0; i < DEST_MAP.length; i++) if (DEST_MAP[i].re.test(d)) { st = STATIONS[DEST_MAP[i].st]; why = ' (dest ' + DEST_MAP[i].port + ')'; break; }
+    if (!st) STATIONS.forEach(function (x) { if (!st || nm(v.la, v.lo, x.la, x.lo) < nm(v.la, v.lo, st.la, st.lo)) st = x; });
     var dist = nm(v.la, v.lo, st.la, st.lo);
     return { st: st, why: why, dist: dist, text: st.n + why + ' · ' + dist.toFixed(1) + ' NM · ETA ' + etaStr(dist, v) };
   }
@@ -5329,7 +5348,7 @@ init();
     var hasP = (data.photos[String(v.m)] || []).length;
     return '<div class="vs-pop"><b>' + esc(v.n) + '</b> <span>' + esc(clsLabel(v)) + ' · ' + v.m + '</span><br>' +
       'SOG ' + (v.s === null ? '–' : v.s.toFixed(1) + ' kt') + ' · COG ' + (v.co === null ? '–' : Math.round(v.co) + '°') + ' · ROT ' + (v.r === null ? '–' : Math.abs(v.r).toFixed(1) + '°/min' + (v.r > 0.4 ? ' stbd' : v.r < -0.4 ? ' port' : '')) + '<br>' +
-      (v.d || v.e ? 'Dest ' + esc(v.d || '–') + (v.e ? ' · ETA ' + esc(v.e) : '') + '<br>' : '') +
+      (v.d || v.e ? 'Dest ' + esc(v.d || '–') + (v.e ? ' · ETA ' + esc(aisEta(v.e)) : '') + '<br>' : '') +
       (stationFor(v) ? 'Station: ' + esc(stationFor(v).text) + '<br>' : '') +
       '<span>Position age ' + v.a + ' min</span><br><a href="#" data-pop="' + v.m + '">' + (hasP ? 'Show photos ›' : 'Open in list ›') + '</a>' +
       ' &nbsp; <a href="#" data-etapick="' + v.m + '">ETA to point ›</a></div>';
@@ -5391,7 +5410,7 @@ init();
     var x = c.v;
     return '<div class="vs-live"><div class="vs-kv">' +
       '<div><span>Position age</span>' + x.a + ' min</div><div><span>SOG / COG</span>' + (x.s === null ? '–' : x.s.toFixed(1) + ' kt') + ' · ' + (x.co === null ? '–' : Math.round(x.co) + '°') + '</div>' +
-      '<div><span>Destination</span>' + esc(x.d || '–') + '</div><div><span>ETA</span>' + esc(x.e || '–') + '</div>' +
+      '<div><span>Destination</span>' + esc(x.d || '–') + '</div><div><span>ETA</span>' + esc(aisEta(x.e) || '–') + '</div>' +
       (stationFor(x) ? '<div class="wide"><span>Station</span>' + esc(stationFor(x).text) + '</div>' : '') + '</div>' +
       (!v.mmsi ? '<div class="vs-save"><button class="vs-btn ghost" data-act="savemmsi" data-m="' + x.m + '" data-n="' + esc(v.name) + '">Save MMSI ' + x.m + '</button><span class="vs-msg"></span></div>' : '') +
       '<div class="vs-mini" id="vsMini"><button class="vs-exp" data-act="expand" data-m="' + x.m + '" data-la="' + x.la + '" data-lo="' + x.lo + '">⤢ Expand</button></div></div>';

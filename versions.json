@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 9,
+   "current": 10,
    "versions": [
     {
      "v": 1,
@@ -83,6 +83,15 @@
      "note": "Wide screens scroll as one page (fixes iPad scrolling). 'Vessels ↓' button next to the flight-rules switch. Vessels v1.5: heading 'Vessel Information'; map refresh every 30 s; ship icons drawn on canvas from zoom 7; vessel names + speed from zoom 9 (switchable); 2 px vectors; Stations layer (dark blue stars with names); ETA to point (dynamic line + ETA label, kept until removed); station ETA for tankers, rigs and heavy-lift (Mongstad → Holmengrå, Sture → Fedje vest, else nearest); Save MMSI for listed vessels found by name in AIS. Requires api/vessel-photo.js with the setMmsi action.",
      "bytes": 4493030,
      "sha": "cfe356da5e2c5c4d4e73a9ce922c6c915a10317057a49d89187b9dfabfabc983"
+    },
+    {
+     "v": 10,
+     "label": "1.10",
+     "file": "index.v10.html",
+     "archived": "2026-10-27",
+     "note": "Vessels v1.6: all vessel ETAs (ETA to point, station ETA, AIS ETA) in Norwegian local time, e.g. 15:42 LT, with automatic summer/winter time. Destination → station also by UN/LOCODE: NO MON / Mongstad → Holmengrå, NO STU / Sture → Fedje vest, NO KAR / Kårstø → Skudefjorden, NO MLK / Melkøya → Fruholmen (spaces, hyphens and case ignored).",
+     "bytes": 4494474,
+     "sha": "ebd655862ec84dc7a05fa92bf1df03df72f927d855e8026a1dda106c8fa5fb4f"
     }
    ]
   }
