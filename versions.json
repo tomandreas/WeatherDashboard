@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 10,
+   "current": 11,
    "versions": [
     {
      "v": 1,
@@ -92,6 +92,15 @@
      "note": "Vessels v1.6: all vessel ETAs (ETA to point, station ETA, AIS ETA) in Norwegian local time, e.g. 15:42 LT, with automatic summer/winter time. Destination → station also by UN/LOCODE: NO MON / Mongstad → Holmengrå, NO STU / Sture → Fedje vest, NO KAR / Kårstø → Skudefjorden, NO MLK / Melkøya → Fruholmen (spaces, hyphens and case ignored).",
      "bytes": 4494474,
      "sha": "ebd655862ec84dc7a05fa92bf1df03df72f927d855e8026a1dda106c8fa5fb4f"
+    },
+    {
+     "v": 11,
+     "label": "1.11",
+     "file": "index.v11.html",
+     "archived": "2026-10-28",
+     "note": "Vessels v1.7: on phones the search no longer opens the map full screen (the card stays, the map below centres on the vessel); full screen only via Expand or the ⤢ button in the map header. Inline map on phones lets one finger scroll the page (pan in full screen). Info box → list also finds listed vessels without MMSI. Esc cancels a pending ETA point. Bug sweep: phone, iPad portrait/landscape and PC, light and dark.",
+     "bytes": 4495640,
+     "sha": "9a70db5bcb8ddd0dab535b84f07d0dc0ff88d65f5f8c5196f59f3729e688026c"
     }
    ]
   }
