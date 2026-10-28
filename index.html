@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.11">
+<meta name="page-version" content="1.12">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -90,7 +90,8 @@ html[data-wd-theme=light] #taf-root .warn.bad{color:#8e1c1c;border-color:#e9a7a7
   #ves-wide{display:block;border-top:1px solid #1d2432;background:#0b0e14}
   #ves-wide #ves-root{max-width:none;padding:18px 24px 40px}
   #ves-root .vs-cols{display:grid;grid-template-columns:minmax(340px,460px) 1fr;gap:22px;align-items:start}
-  #ves-root .vs-right{position:sticky;top:12px}
+  #ves-root .vs-right{position:sticky;top:12px;margin-top:0}
+  #ves-root .vs-left h2{margin:27px 0 10px}
   #ves-wide #ves-root #vsMap{height:calc(100vh - 120px);min-height:420px}
   #ves-root .vs-x{display:none}
 }
@@ -857,7 +858,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 </head>
 <body>
 <div class="wd" id="wd" data-tab="taf">
-<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.11 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.7">Weather<b>Dashboard</b><span class="wd-v">v1.11</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
+<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.12 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.8">Weather<b>Dashboard</b><span class="wd-v">v1.12</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
 <div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button><button role="tab" data-tab="ves" aria-controls="pane-ves" aria-selected="false" tabindex="-1">Vessels</button></div>
 <section class="wd-pane" id="pane-taf" role="tabpanel" aria-label="TAF Timeline"><div class="wd-scroll" id="scroll-taf"><div id="taf-root">
 
@@ -5118,9 +5119,9 @@ init();
   function norm(s) { return String(s || '').toUpperCase().replace(/\s+/g, ' ').trim(); }
 
   root.innerHTML =
+    '<div class="vs-cols"><div class="vs-left">' +
     '<h2>Vessel <b>Information</b></h2>' +
     '<div class="vs-stat" id="vsStat">Loading vessel list…</div>' +
-    '<div class="vs-cols"><div class="vs-left">' +
     '<input type="search" id="vsQ" placeholder="Search vessel name or MMSI" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
     '<div class="vs-list" id="vsList"></div>' +
     '<div class="vs-hint">Photos appear in the ForeFlight AIS layer within a few minutes of upload.</div></div>' +
@@ -5132,10 +5133,11 @@ init();
   var WORKER = 'https://foreflight-ais.tom-ostrem-airlift-github.workers.dev';
   var COL = { tanker: '#e04848', rig: '#e04848', heavylift: '#e04848', cargo: '#4cc26a', passenger: '#4ea8de', service: '#e8a020', fishing: '#b07cf0', other: '#d8dde6' };
   var STALE_COL = '#808690', LINE_COL = '#3a3f47';
-  var GROUP = { tanker: 'tanker', rig: 'righeavy', heavylift: 'righeavy', cargo: 'cargo', service: 'service', passenger: 'passenger', fishing: 'fishother', other: 'fishother' };
-  var LAYERS = [['tanker', 'Tankers', COL.tanker], ['righeavy', 'Rigs & heavy-lift', ''], ['cargo', 'Cargo', COL.cargo], ['service', 'Service / offshore', COL.service], ['passenger', 'Passenger', COL.passenger], ['fishother', 'Fishing / other', COL.other]];
+  var AIR_COL = '#1b1f27';
+  var GROUP = { aircraft: 'aircraft', tanker: 'tanker', rig: 'righeavy', heavylift: 'righeavy', cargo: 'cargo', service: 'service', passenger: 'passenger', fishing: 'fishother', other: 'fishother' };
+  var LAYERS = [['tanker', 'Tankers', COL.tanker], ['righeavy', 'Rigs & heavy-lift', ''], ['cargo', 'Cargo', COL.cargo], ['service', 'Service / offshore', COL.service], ['passenger', 'Passenger', COL.passenger], ['fishother', 'Fishing / other', COL.other], ['aircraft', 'Aircraft (SAR)', '']];
   var OVER = [['stations', 'Stations'], ['names', 'Vessel names & speed'], ['vectors', 'Vectors & turn curves'], ['seamarks', 'Seamarks (OpenSeaMap)'], ['photos', 'Only vessels with photos']];
-  var lay = { tanker: 1, righeavy: 1, cargo: 1, service: 1, passenger: 1, fishother: 1, stations: 1, names: 1, vectors: 1, seamarks: 1, photos: 0 };
+  var lay = { tanker: 1, righeavy: 1, cargo: 1, service: 1, passenger: 1, fishother: 1, aircraft: 1, stations: 1, names: 1, vectors: 1, seamarks: 1, photos: 0 };
   var STATIONS = [
     { n: 'Holmengrå', la: 60.85, lo: 4.4316 }, { n: 'Fedje vest', la: 60.7667, lo: 4.465 },
     { n: 'Skudefjorden', la: 59.033, lo: 5.167 }, { n: 'Crew Change Bergen', la: 60.22883, lo: 4.51117 },
@@ -5158,7 +5160,7 @@ init();
     if ((t >= 60 && t <= 69) || (t >= 40 && t <= 49)) return 'Passenger'; if (t === 30) return 'Fishing';
     if ((t >= 31 && t <= 34) || (t >= 50 && t <= 59) || (t >= 90 && t <= 99)) return 'Service'; return t ? 'Other' : '';
   }
-  function clsLabel(v) { return v.c === 'rig' ? 'Rig / drilling unit' : v.c === 'heavylift' ? 'Heavy-lift crane vessel' : (typeLabel(v.t) || 'Other'); }
+  function clsLabel(v) { return v.c === 'aircraft' ? 'SAR aircraft' : v.c === 'rig' ? 'Rig / drilling unit' : v.c === 'heavylift' ? 'Heavy-lift crane vessel' : (typeLabel(v.t) || 'Other'); }
   function moving(v) { return v.s !== null && v.s >= 0.5; }
   function dirOf(v) { return moving(v) ? (v.co !== null ? v.co : v.h) : null; }
   function stale(v) { return v.a > 30; }
@@ -5212,8 +5214,13 @@ init();
   // Tankers, rigs and heavy-lift: destination Mongstad → Holmengrå, Sture → Fedje vest, otherwise the nearest station
   function stationFor(v) {
     if (v.c !== 'tanker' && v.c !== 'rig' && v.c !== 'heavylift') return null;
-    var d = String(v.d || '').toUpperCase().replace(/[\s\-_.,\/>]/g, ''), st = null, why = '';
-    for (var i = 0; i < DEST_MAP.length; i++) if (DEST_MAP[i].re.test(d)) { st = STATIONS[DEST_MAP[i].st]; why = ' (dest ' + DEST_MAP[i].port + ')'; break; }
+    // "FROM>TO" (also => -> and " - "): the arrival port wins, then the departure port
+    var parts = String(v.d || '').toUpperCase().split(/\s*(?:=>|->|>|\s-\s)\s*/).filter(Boolean), st = null, why = '';
+    var legs = parts.length > 1 ? [[parts[parts.length - 1], 'to'], [parts[0], 'from']] : [[parts[0] || '', 'to']];
+    legs.some(function (l) {
+      var d = l[0].replace(/[\s\-_.,\/]/g, '');
+      return DEST_MAP.some(function (x) { if (x.re.test(d)) { st = STATIONS[x.st]; why = ' (' + l[1] + ' ' + x.port + ')'; return true; } });
+    });
     if (!st) STATIONS.forEach(function (x) { if (!st || nm(v.la, v.lo, x.la, x.lo) < nm(v.la, v.lo, st.la, st.lo)) st = x; });
     var dist = nm(v.la, v.lo, st.la, st.lo);
     return { st: st, why: why, dist: dist, text: st.n + why + ' · ' + dist.toFixed(1) + ' NM · ETA ' + etaStr(dist, v) };
@@ -5229,13 +5236,20 @@ init();
     ctx.save(); ctx.translate(p.x, p.y); ctx.lineWidth = 1.4; ctx.strokeStyle = '#0a0e14'; ctx.fillStyle = col;
     if (sel === v.m) { ctx.save(); ctx.setLineDash([4, 3]); ctx.lineWidth = 2.5; ctx.strokeStyle = '#e8a020'; ctx.beginPath(); ctx.arc(0, 0, 14, 0, 2 * Math.PI); ctx.stroke(); ctx.restore(); }
     ctx.beginPath();
-    if (v.c === 'rig') { ctx.rect(-6, -6, 12, 12); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-4, -4); ctx.lineTo(4, 4); ctx.moveTo(4, -4); ctx.lineTo(-4, 4); ctx.stroke(); }
+    if (v.c === 'aircraft') {
+      ctx.rotate((d !== null ? d : 0) * Math.PI / 180); ctx.fillStyle = st ? STALE_COL : AIR_COL; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.3;
+      ctx.moveTo(-1.6, 3); ctx.lineTo(-1.2, 13); ctx.lineTo(1.2, 13); ctx.lineTo(1.6, 3); ctx.closePath(); ctx.fill(); ctx.stroke();   // tail boom
+      ctx.beginPath(); ctx.moveTo(-4, 12); ctx.lineTo(4, 12); ctx.stroke();                                                          // tail rotor
+      ctx.beginPath(); ctx.ellipse(0, -1, 4.5, 7, 0, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();                                    // cabin
+      ctx.beginPath(); ctx.strokeStyle = st ? STALE_COL : AIR_COL; ctx.lineWidth = 2; ctx.moveTo(-11, -9); ctx.lineTo(11, 7); ctx.moveTo(11, -9); ctx.lineTo(-11, 7); ctx.stroke();   // main rotor
+    }
+    else if (v.c === 'rig') { ctx.rect(-6, -6, 12, 12); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-4, -4); ctx.lineTo(4, 4); ctx.moveTo(4, -4); ctx.lineTo(-4, 4); ctx.stroke(); }
     else if (v.c === 'heavylift') { ctx.moveTo(0, -8); ctx.lineTo(8, 0); ctx.lineTo(0, 8); ctx.lineTo(-8, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.fillStyle = '#0a0e14'; ctx.arc(0, 0, 2.4, 0, 2 * Math.PI); ctx.fill(); }
     else if (d !== null) { ctx.rotate(d * Math.PI / 180); ctx.moveTo(0, -12); ctx.lineTo(5, -4); ctx.lineTo(5, 9); ctx.lineTo(-5, 9); ctx.lineTo(-5, -4); ctx.closePath(); ctx.fill(); ctx.stroke(); }
     else { ctx.arc(0, 0, 5, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); }
     ctx.restore();
     if (lay.names && z >= LABEL_ZOOM) {
-      var t = v.n + (moving(v) ? ' ' + Math.round(v.s) + 'kt' : '');
+      var t = v.n + (moving(v) ? ' ' + Math.round(v.s) + 'kt' : '') + (v.c === 'aircraft' && v.alt != null ? ' ' + v.alt + 'ft' : '');
       ctx.save(); ctx.font = "600 11px 'LN Mono','IBM Plex Mono',ui-monospace,monospace"; ctx.lineJoin = 'round';
       ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,.92)'; ctx.fillStyle = '#0b0e14';
       ctx.strokeText(t, p.x + 13, p.y + 4); ctx.fillText(t, p.x + 13, p.y + 4); ctx.restore();
@@ -5257,10 +5271,10 @@ init();
     return true;
   }
   function addVessel(v, iconsGrp, linesGrp, z, renderer) {
-    if (z >= ICON_ZOOM) {
+    if (z >= ICON_ZOOM || v.c === 'aircraft') {
       var mk = new (shipClass())([v.la, v.lo], { radius: 10, renderer: renderer, v: v, z: z, stroke: false, fill: false });
       mk.on('click', function (e) { L.DomEvent.stop(e); pick(v); }); iconsGrp.addLayer(mk);
-      if (lay.vectors && z >= VEC_ZOOM && moving(v) && !stale(v) && v.co !== null)
+      if (lay.vectors && v.c !== 'aircraft' && z >= VEC_ZOOM && moving(v) && !stale(v) && v.co !== null)
         (v.tc && v.r !== null ? curveLines(v) : vectorLines(v)).forEach(function (seg) { linesGrp.addLayer(L.polyline(seg, { color: LINE_COL, weight: 2, opacity: 1, lineCap: 'round', lineJoin: 'round', renderer: renderer, interactive: false })); });
     } else {
       var cm = L.circleMarker([v.la, v.lo], { radius: sel === v.m ? 6 : 3.5, color: '#0a0e14', weight: 1, fillColor: stale(v) ? STALE_COL : (COL[v.c] || COL.other), fillOpacity: 1, renderer: renderer });
@@ -5293,7 +5307,7 @@ init();
   function loadLive() {
     if (!map) return;
     lastFetch = Date.now();
-    fetch(WORKER + '/live.json?bbox=' + bboxOf(map.getBounds())).then(function (r) { return r.json(); }).then(function (j) {
+    fetch(WORKER + '/live.json?bbox=' + bboxOf(map.getBounds()) + (lay.aircraft ? '&air=1' : '')).then(function (r) { return r.json(); }).then(function (j) {
       live = j.vessels || []; liveT = j.t || '';
       if (focusLv && focusLv.m === sel && !live.some(function (x) { return x.m === sel; })) live.push(focusLv);   // keep the searched vessel visible
       drawMap(); refreshEtaVessels();
@@ -5348,6 +5362,9 @@ init();
     document.getElementById('vsMapStat').textContent = 'Tap the map to set the ETA point for ' + (v ? v.n : a.dataset.etapick);
   }, true);
   function popupHtml(v) {
+    if (v.c === 'aircraft') return '<div class="vs-pop"><b>' + esc(v.n) + '</b> <span>SAR aircraft · ' + v.m + '</span><br>' +
+      'GS ' + (v.s === null ? '–' : Math.round(v.s) + ' kt') + ' · TRK ' + (v.co === null ? '–' : Math.round(v.co) + '°') + (v.alt != null ? ' · ALT ' + v.alt + ' ft' : '') + '<br>' +
+      '<span>Position age ' + v.a + ' min</span></div>';
     var hasP = (data.photos[String(v.m)] || []).length;
     return '<div class="vs-pop"><b>' + esc(v.n) + '</b> <span>' + esc(clsLabel(v)) + ' · ' + v.m + '</span><br>' +
       'SOG ' + (v.s === null ? '–' : v.s.toFixed(1) + ' kt') + ' · COG ' + (v.co === null ? '–' : Math.round(v.co) + '°') + ' · ROT ' + (v.r === null ? '–' : Math.abs(v.r).toFixed(1) + '°/min' + (v.r > 0.4 ? ' stbd' : v.r < -0.4 ? ' port' : '')) + '<br>' +
@@ -5453,6 +5470,7 @@ init();
     try { localStorage.setItem('ves.layers', JSON.stringify(lay)); } catch (x) {}
     if (k === 'seamarks' && map) { if (lay.seamarks) seaLayer.addTo(map); else map.removeLayer(seaLayer); }
     if (k === 'stations') drawStations();
+    if (k === 'aircraft' && lay.aircraft) loadLive();
     drawMap();
   });
   document.getElementById('vsLayBtn').onclick = function () { document.getElementById('vsMapWrap').classList.toggle('lay-open'); };
@@ -5517,7 +5535,7 @@ init();
     if (!hits.length && s.length >= 3) {
       var nv = { name: s, mmsi: null, isNew: true };
       h = '<div class="vs-item"><div class="vs-head"><span class="vs-name">Not in the list</span></div><div class="vs-body">' +
-        '<div class="vs-none">Add a photo for a vessel that is not listed. Leave MMSI empty to look it up from current AIS data by name.</div>' +
+        '<div class="vs-none">Add a photo for a vessel that is not listed. Use Find MMSI to look it up in current AIS data by name.</div>' +
         (formFor === 'new' ? form(nv, true) : '<button class="vs-btn ghost" data-act="add" data-k="new">Upload photo for new vessel</button>') + '</div></div>';
     }
     list.innerHTML = h;

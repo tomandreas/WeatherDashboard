@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 11,
+   "current": 12,
    "versions": [
     {
      "v": 1,
@@ -101,6 +101,15 @@
      "note": "Vessels v1.7: on phones the search no longer opens the map full screen (the card stays, the map below centres on the vessel); full screen only via Expand or the ⤢ button in the map header. Inline map on phones lets one finger scroll the page (pan in full screen). Info box → list also finds listed vessels without MMSI. Esc cancels a pending ETA point. Bug sweep: phone, iPad portrait/landscape and PC, light and dark.",
      "bytes": 4495640,
      "sha": "9a70db5bcb8ddd0dab535b84f07d0dc0ff88d65f5f8c5196f59f3729e688026c"
+    },
+    {
+     "v": 12,
+     "label": "1.12",
+     "file": "index.v12.html",
+     "archived": "2026-10-28",
+     "note": "Vessels v1.8: Aircraft (SAR) layer on the map (MMSI 111…, helicopter symbol rotated to track, name/speed/altitude, no vectors; dashboard only, never ForeFlight). Station pairing reads FROM>TO (also =>, ->, ' - '): arrival port wins, then departure; label says 'to …' or 'from …'. Wide screens: 'Vessel Information' aligned with 'Live Traffic'. Upload hint text updated. Requires AIS Worker 1.8 (&air=1).",
+     "bytes": 4497515,
+     "sha": "b4ca3a446f5f7b7f1c2ef1922e60df9766bc7ec08e510c45994a5c5c8822dd49"
     }
    ]
   }
