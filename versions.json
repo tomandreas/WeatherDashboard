@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 12,
+   "current": 15,
    "versions": [
     {
      "v": 1,
@@ -110,6 +110,33 @@
      "note": "Vessels v1.8: Aircraft (SAR) layer on the map (MMSI 111…, helicopter symbol rotated to track, name/speed/altitude, no vectors; dashboard only, never ForeFlight). Station pairing reads FROM>TO (also =>, ->, ' - '): arrival port wins, then departure; label says 'to …' or 'from …'. Wide screens: 'Vessel Information' aligned with 'Live Traffic'. Upload hint text updated. Requires AIS Worker 1.8 (&air=1).",
      "bytes": 4497515,
      "sha": "b4ca3a446f5f7b7f1c2ef1922e60df9766bc7ec08e510c45994a5c5c8822dd49"
+    },
+    {
+     "v": 13,
+     "label": "1.13",
+     "file": "index.v13.html",
+     "archived": "2026-10-28",
+     "note": "Vessels v1.9: one finger pans the map again on phones (inline and full screen); phone page ends at the map's bottom edge (no empty space below); choosing a vessel in the search hides the other results, with '← All results (n)' to go back; new helicopter symbol (navy, white halo, nose on track); ETA to point also for aircraft.",
+     "bytes": 4498859,
+     "sha": "f7812491dc16ae3a10f658e669e1fa48ab9429eacd77cb921a00e7a0d699df12"
+    },
+    {
+     "v": 14,
+     "label": "1.14",
+     "file": "index.v14.html",
+     "archived": "2026-11-02",
+     "note": "Vessels v1.10: breadcrumbs for the selected target only — one grey 3 px dot per 2 minutes for the last 60 minutes, fading to ~25 % for the oldest, gaps where there are no reports; refreshed every 30 s; removed when the info box closes (which now also clears the selection ring). Requires AIS Worker 1.9 (/track.json).",
+     "bytes": 4500722,
+     "sha": "5ef4177cc5d60161cda290b7ae2e2b9e2dfa1a1af913bc8b0d11e9a422ce4480"
+    },
+    {
+     "v": 15,
+     "label": "1.15",
+     "file": "index.v15.html",
+     "archived": "2026-11-02",
+     "note": "Vessels v1.11: map memory reduced to stop iOS reloading the page on big zooms — one shared canvas for symbols, vectors and breadcrumbs with 15 % margin (was a new canvas per redraw, 30 %); tiles: keepBuffer 1, no loading during zoom; seamarks off by default on phones (choice remembered). Measured at iPhone size, full screen, 6 zoom steps: canvas peak 33 → 7 MB, tiles held 42 → 21.",
+     "bytes": 4501217,
+     "sha": "25fc82a6c958f8c333aa81f609554a655a3c158904ad8b055638440cf5e45f71"
     }
    ]
   }
