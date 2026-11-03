@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 15,
+   "current": 17,
    "versions": [
     {
      "v": 1,
@@ -137,6 +137,24 @@
      "note": "Vessels v1.11: map memory reduced to stop iOS reloading the page on big zooms — one shared canvas for symbols, vectors and breadcrumbs with 15 % margin (was a new canvas per redraw, 30 %); tiles: keepBuffer 1, no loading during zoom; seamarks off by default on phones (choice remembered). Measured at iPhone size, full screen, 6 zoom steps: canvas peak 33 → 7 MB, tiles held 42 → 21.",
      "bytes": 4501217,
      "sha": "25fc82a6c958f8c333aa81f609554a655a3c158904ad8b055638440cf5e45f71"
+    },
+    {
+     "v": 16,
+     "label": "1.16",
+     "file": "index.v16.html",
+     "archived": "2026-11-02",
+     "note": "Vessels v1.12: aircraft breadcrumbs (MMSI 111…) one dot every 30 s for the last 45 min (±15 s tolerance, gaps where no report); vessels unchanged (2 min / 60 min).",
+     "bytes": 4501485,
+     "sha": "3524c3541d2fd36aa09bb97994fb145eb01d23d2fb877db3ebe69a104201dcfb"
+    },
+    {
+     "v": 17,
+     "label": "1.17",
+     "file": "index.v17.html",
+     "archived": "2026-11-02",
+     "note": "Vessels v1.13: bug fix — after using ETA to point, targets could no longer be selected (the ETA line created a second map canvas on top that swallowed taps; regression from 1.15). Everything is now drawn on the one shared canvas.",
+     "bytes": 4501665,
+     "sha": "b7da68b913a0b4cc967fca2d1407e8046a2ad35631097d049a0cefe0e7bbc74f"
     }
    ]
   }
