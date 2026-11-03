@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 17,
+   "current": 18,
    "versions": [
     {
      "v": 1,
@@ -155,6 +155,15 @@
      "note": "Vessels v1.13: bug fix — after using ETA to point, targets could no longer be selected (the ETA line created a second map canvas on top that swallowed taps; regression from 1.15). Everything is now drawn on the one shared canvas.",
      "bytes": 4501665,
      "sha": "b7da68b913a0b4cc967fca2d1407e8046a2ad35631097d049a0cefe0e7bbc74f"
+    },
+    {
+     "v": 18,
+     "label": "1.18",
+     "file": "index.v18.html",
+     "archived": "2026-11-03",
+     "note": "Vessels v1.14: selection persists after closing the info box (ring + breadcrumbs keep updating); tap the selected target again to deselect (double taps within 0.4 s ignored); collapsing the card in the list deselects. ETA to point: tap a station (exact station position), a vessel/aircraft (intercept: line to the meeting point, faint line for the target's movement, 'No intercept at current speed' when unsolvable), or open sea. Stations are tappable only while placing an ETA point; the selection does not change while placing.",
+     "bytes": 4505112,
+     "sha": "ec68caf962608f9a996254731ee755da2c52c93afd6cd48b644a240e97bf3105"
     }
    ]
   }
