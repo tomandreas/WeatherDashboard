@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 19,
+   "current": 20,
    "versions": [
     {
      "v": 1,
@@ -173,6 +173,15 @@
      "note": "Vessels v1.15: bug fix — an ETA/intercept from an aircraft showed 'position not available' after zooming so the aircraft left the view (the out-of-view lookup did not ask the Worker for aircraft). Lookup now includes aircraft, and the last known position of every ETA vessel/target is kept so labels never blank during a zoom or pan.",
      "bytes": 4505349,
      "sha": "9efda8afc93e6d7a1bb963a466a39808c394414b2e8d9a7138bfa13f843a1092"
+    },
+    {
+     "v": 20,
+     "label": "1.20",
+     "file": "index.v20.html",
+     "archived": "2026-11-04",
+     "note": "Vessels v1.16: Fixed Offshore Installations layer (Sodir, 121 surface installations, ED50→WGS84): platforms dark blue / black (shut down, partly removed, abandoned) / outline (being installed), FPSO/FSU as hull with derrick, Hywind Tampen turbines red; names from zoom 9; tap for details; usable as ETA target. Hidden when the installation transmits AIS under its own name within 2 km (fresh ≤30 min). AIS rigs now a dark red platform symbol (grey when stale). Requires AIS Worker 1.10 (/fixed.json).",
+     "bytes": 4514993,
+     "sha": "ba3ff66ad339788dfbfdbd4f9cc05de4594eb9171fb63a563c76103dba0d2d27"
     }
    ]
   }

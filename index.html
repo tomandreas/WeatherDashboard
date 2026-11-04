@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="page-version" content="1.19">
+<meta name="page-version" content="1.20">
 <meta name="loome-version" content="1.8">
 <title>WeatherDashboard</title>
 <meta name="description" content="TAF timeline and LOOME Night Ops side by side.">
@@ -860,7 +860,7 @@ html[data-wd-theme=light] #loome-root .a-scrub .a-time{text-shadow:none}
 </head>
 <body>
 <div class="wd" id="wd" data-tab="taf">
-<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.19 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.15">Weather<b>Dashboard</b><span class="wd-v">v1.19</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
+<header class="wd-top"><span class="wd-name" title="WeatherDashboard 1.20 with TAF Timeline v1.27, LOOME Night Ops v1.8 and Vessels v1.16">Weather<b>Dashboard</b><span class="wd-v">v1.20</span></span><span class="wd-theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><button class="wd-sw" id="wdTheme" role="switch" aria-checked="true" aria-label="Dark theme" title="Light or dark theme"><span></span></button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span></header>
 <div class="wd-tabs" role="tablist" aria-label="Apps"><button role="tab" data-tab="taf" aria-controls="pane-taf" aria-selected="true">TAF Timeline</button><button role="tab" data-tab="loome" aria-controls="pane-loome" aria-selected="false" tabindex="-1">LOOME Night Ops</button><button role="tab" data-tab="ves" aria-controls="pane-ves" aria-selected="false" tabindex="-1">Vessels</button></div>
 <section class="wd-pane" id="pane-taf" role="tabpanel" aria-label="TAF Timeline"><div class="wd-scroll" id="scroll-taf"><div id="taf-root">
 
@@ -5138,8 +5138,8 @@ init();
   var AIR_COL = '#0a2a5e';
   var GROUP = { aircraft: 'aircraft', tanker: 'tanker', rig: 'righeavy', heavylift: 'righeavy', cargo: 'cargo', service: 'service', passenger: 'passenger', fishing: 'fishother', other: 'fishother' };
   var LAYERS = [['tanker', 'Tankers', COL.tanker], ['righeavy', 'Rigs & heavy-lift', ''], ['cargo', 'Cargo', COL.cargo], ['service', 'Service / offshore', COL.service], ['passenger', 'Passenger', COL.passenger], ['fishother', 'Fishing / other', COL.other], ['aircraft', 'Aircraft (SAR)', '']];
-  var OVER = [['stations', 'Stations'], ['names', 'Vessel names & speed'], ['vectors', 'Vectors & turn curves'], ['seamarks', 'Seamarks (OpenSeaMap)'], ['photos', 'Only vessels with photos']];
-  var lay = { tanker: 1, righeavy: 1, cargo: 1, service: 1, passenger: 1, fishother: 1, aircraft: 1, stations: 1, names: 1, vectors: 1, seamarks: 1, photos: 0 };
+  var OVER = [['fixed', 'Fixed offshore installations'], ['stations', 'Stations'], ['names', 'Vessel names & speed'], ['vectors', 'Vectors & turn curves'], ['seamarks', 'Seamarks (OpenSeaMap)'], ['photos', 'Only vessels with photos']];
+  var lay = { tanker: 1, righeavy: 1, cargo: 1, service: 1, passenger: 1, fishother: 1, aircraft: 1, fixed: 1, stations: 1, names: 1, vectors: 1, seamarks: 1, photos: 0 };
   var STATIONS = [
     { n: 'Holmengrå', la: 60.85, lo: 4.4316 }, { n: 'Fedje vest', la: 60.7667, lo: 4.465 },
     { n: 'Skudefjorden', la: 59.033, lo: 5.167 }, { n: 'Crew Change Bergen', la: 60.22883, lo: 4.51117 },
@@ -5151,6 +5151,10 @@ init();
     { re: /STURE|NOSTU/, st: 1, port: 'Sture' },                // → Fedje vest
     { re: /K[AÅ]RST[OØ]|NOKAR/, st: 2, port: 'Kårstø' },        // → Skudefjorden
     { re: /MELK[OØ]YA|NOMLK/, st: 5, port: 'Melkøya' }];        // → Fruholmen
+  // Fixed Offshore Installations (Sodir) + AIS rig symbol, drawn as images on the shared canvas
+  var FX_SVG = {"fixed_plat_svc": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\"/>\n <path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#0a2a5e\" stroke-width=\"1.7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"#0a2a5e\" stroke=\"#0a2a5e\" stroke-width=\"1.4\"/></svg>", "fixed_plat_off": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\"/>\n <path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#111\" stroke-width=\"1.7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"#111\" stroke=\"#111\" stroke-width=\"1.4\"/></svg>", "fixed_plat_inst": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\"/>\n <path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#0a2a5e\" stroke-width=\"1.7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"#fff\" stroke=\"#0a2a5e\" stroke-width=\"1.4\"/></svg>", "fixed_ship_svc": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4 M-8,3 V0 H-4 V3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4\" fill=\"none\" stroke=\"#0a2a5e\" stroke-width=\"1.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <path d=\"M-8,3 V0 H-4 V3\" fill=\"#0a2a5e\" stroke=\"#0a2a5e\" stroke-width=\"1.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"#0a2a5e\" stroke=\"#0a2a5e\" stroke-width=\"1.4\" stroke-linejoin=\"round\"/></svg>", "fixed_ship_off": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4 M-8,3 V0 H-4 V3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4\" fill=\"none\" stroke=\"#111\" stroke-width=\"1.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <path d=\"M-8,3 V0 H-4 V3\" fill=\"#111\" stroke=\"#111\" stroke-width=\"1.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"#111\" stroke=\"#111\" stroke-width=\"1.4\" stroke-linejoin=\"round\"/></svg>", "fixed_ship_inst": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4 M-8,3 V0 H-4 V3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-1.2,3 L1.5,-9 L4.2,3 M0.2,-3.5 H2.8 M-0.4,-0.5 H3.4\" fill=\"none\" stroke=\"#0a2a5e\" stroke-width=\"1.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <path d=\"M-8,3 V0 H-4 V3\" fill=\"#fff\" stroke=\"#0a2a5e\" stroke-width=\"1.2\" stroke-linejoin=\"round\"/>\n <path d=\"M-11,3 H11 L9,9 H-9.5 Z\" fill=\"#fff\" stroke=\"#0a2a5e\" stroke-width=\"1.4\" stroke-linejoin=\"round\"/></svg>", "fixed_wind": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M0,-3 L0,-11.5 M0,-3 L7.4,1.3 M0,-3 L-7.4,1.3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M-1.2,11 L-0.6,-2 H0.6 L1.2,11 Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3\"/>\n <path d=\"M-1.2,11 L-0.6,-2 H0.6 L1.2,11 Z\" fill=\"#d62828\" stroke=\"#d62828\" stroke-width=\"0.8\" stroke-linejoin=\"round\"/>\n <path d=\"M0,-3 L0,-11.5 M0,-3 L7.4,1.3 M0,-3 L-7.4,1.3\" fill=\"none\" stroke=\"#d62828\" stroke-width=\"2\" stroke-linecap=\"round\"/><circle cy=\"-3\" r=\"1.8\" fill=\"#d62828\" stroke=\"#fff\" stroke-width=\"0.8\"/></svg>", "rig_stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\"/>\n <path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#8b1a1a\" stroke-width=\"1.7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"#8b1a1a\" stroke=\"#8b1a1a\" stroke-width=\"1.4\"/></svg>", "rigstale_stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"-12 -12 24 24\"><path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.4\"/>\n <path d=\"M-6,4 V11 M0,4 V11 M6,4 V11 M-3.2,2.5 L0,-10 L3.2,2.5 M-2,-2.5 H2 M-2.7,0.3 H2.7\" fill=\"none\" stroke=\"#808690\" stroke-width=\"1.7\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n <rect x=\"-9\" y=\"1.6\" width=\"18\" height=\"3\" rx=\"0.6\" fill=\"#808690\" stroke=\"#808690\" stroke-width=\"1.4\"/></svg>"};
+  var FX_IMG = {}; Object.keys(FX_SVG).forEach(function (k) { var im = new Image(); im.onload = function () { if (map) drawMap(); }; im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(FX_SVG[k]); FX_IMG[k] = im; });
+  var fixed = [], fixedT = 0, gFixed = null, Fx = null;
   var STAR = '#1e3a8a', ICON_ZOOM = 7, LABEL_ZOOM = 9, VEC_ZOOM = 8;
   var etaPts = {}, etaCache = {}, pendingEta = null, gEta = null, gStations = null, gTrack = null, track = null, curPopup = null;
   try { etaPts = JSON.parse(localStorage.getItem('ves.eta') || '{}') || {}; } catch (e) {}
@@ -5257,7 +5261,7 @@ init();
       ctx.rect(-2.9, 15, 5.8, 1.6);                             // tail fin
       ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke(); ctx.fillStyle = hc; ctx.fill();
     }
-    else if (v.c === 'rig') { ctx.rect(-6, -6, 12, 12); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-4, -4); ctx.lineTo(4, 4); ctx.moveTo(4, -4); ctx.lineTo(-4, 4); ctx.stroke(); }
+    else if (v.c === 'rig') { var ri = FX_IMG[st ? 'rigstale_stop' : 'rig_stop']; if (ri && ri.complete) ctx.drawImage(ri, -11, -11, 22, 22); }
     else if (v.c === 'heavylift') { ctx.moveTo(0, -8); ctx.lineTo(8, 0); ctx.lineTo(0, 8); ctx.lineTo(-8, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.fillStyle = '#0a0e14'; ctx.arc(0, 0, 2.4, 0, 2 * Math.PI); ctx.fill(); }
     else if (d !== null) { ctx.rotate(d * Math.PI / 180); ctx.moveTo(0, -12); ctx.lineTo(5, -4); ctx.lineTo(5, 9); ctx.lineTo(-5, 9); ctx.lineTo(-5, -4); ctx.closePath(); ctx.fill(); ctx.stroke(); }
     else { ctx.arc(0, 0, 5, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); }
@@ -5309,7 +5313,7 @@ init();
     seaLayer = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', Object.assign({ attribution: 'OpenSeaMap' }, TILE));
     if (lay.seamarks) seaLayer.addTo(map);
     map.attributionControl.addAttribution('AIS: Kystverket/BarentsWatch');
-    gTrack = L.layerGroup().addTo(map); gLines = L.layerGroup().addTo(map); gEta = L.layerGroup().addTo(map); gIcons = L.layerGroup().addTo(map); gStations = L.layerGroup().addTo(map);
+    gFixed = L.layerGroup().addTo(map); gTrack = L.layerGroup().addTo(map); gLines = L.layerGroup().addTo(map); gEta = L.layerGroup().addTo(map); gIcons = L.layerGroup().addTo(map); gStations = L.layerGroup().addTo(map);
     var deb; map.on('moveend', function () { clearTimeout(deb); deb = setTimeout(function () { loadLive(); }, 350); });
     map.on('click', function (e) {
       if (pendingEta) { setEtaTarget({ la: e.latlng.lat, lo: e.latlng.lng }); return; }
@@ -5329,7 +5333,7 @@ init();
       live = j.vessels || []; liveT = j.t || '';
       if (focusLv && focusLv.m === sel && !live.some(function (x) { return x.m === sel; })) live.push(focusLv);   // keep the searched vessel visible
       live.forEach(function (v) { if (etaPts[v.m] || etaTargets()[v.m]) etaCache[v.m] = v; });
-      drawMap(); refreshEtaVessels(); if (sel) loadTrack(sel);
+      drawMap(); refreshEtaVessels(); if (sel) loadTrack(sel); loadFixed();
       document.getElementById('vsMapStat').textContent = 'updated ' + (liveT ? liveT.slice(11, 19) + 'Z' : '–') + ' · ' + live.length + ' vessels';
     }).catch(function () { document.getElementById('vsMapStat').textContent = 'AIS data not available'; });
   }
@@ -5338,7 +5342,7 @@ init();
     gIcons.clearLayers(); gLines.clearLayers();
     var z = map.getZoom(), b = map.getBounds().pad(0.1), n = 0, r = canv;   // one shared canvas for symbols, vectors and breadcrumbs
     live.forEach(function (v) { if (!shown(v) || !b.contains([v.la, v.lo]) || n > 4000) return; n++; addVessel(v, gIcons, gLines, z, r); });
-    drawEta();
+    drawEta(); drawFixed();
   }
   // ---------- breadcrumbs: selected target only ----------
   // Vessels: one grey dot per 2 min for 60 min. Aircraft (MMSI 111…): one dot per 30 s for 45 min.
@@ -5361,6 +5365,44 @@ init();
       if (!best) continue;                        // no report near that time: leave a gap
       gTrack.addLayer(L.circleMarker([best.p.la, best.p.lo], { radius: 1.5, stroke: false, fillColor: '#6e7682', fillOpacity: 0.85 - 0.6 * (k - 1) / (sp.n - 1), renderer: r, interactive: false }));
     }
+  }
+
+  // ---------- Fixed Offshore Installations ----------
+  function fxClass() {
+    if (Fx) return Fx;
+    Fx = L.CircleMarker.extend({ _updatePath: function () {
+      var r = this._renderer; if (!r._drawing || this._empty()) return;
+      var f = this.options.f, p = this._point, ctx = r._ctx, k = f.k === 'wind' ? 'fixed_wind' : 'fixed_' + f.k + '_' + f.s, im = FX_IMG[k];
+      if (im && im.complete) ctx.drawImage(im, p.x - 11, p.y - 11, 22, 22);
+      if (this.options.z >= LABEL_ZOOM) {
+        ctx.save(); ctx.font = "600 11px 'LN Mono','IBM Plex Mono',ui-monospace,monospace"; ctx.lineJoin = 'round'; ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(255,255,255,.92)'; ctx.fillStyle = f.s === 'svc' ? '#0a2a5e' : '#111';
+        ctx.strokeText(f.n, p.x + 13, p.y + 4); ctx.fillText(f.n, p.x + 13, p.y + 4); ctx.restore();
+      }
+    } });
+    return Fx;
+  }
+  function loadFixed() {
+    if (Date.now() - fixedT < 120000 && fixed.length) { drawFixed(); return; }
+    fixedT = Date.now();
+    fetch(WORKER + '/fixed.json').then(function (r) { return r.json(); }).then(function (j) { fixed = j.items || []; drawFixed(); }).catch(function () {});
+  }
+  function drawFixed() {
+    if (!gFixed) return; gFixed.clearLayers(); if (!lay.fixed) return;
+    var z = map.getZoom(), b = map.getBounds().pad(0.1);
+    fixed.forEach(function (f) {
+      if (f.sup || !b.contains([f.la, f.lo])) return;   // shown via AIS instead
+      var mk = new (fxClass())([f.la, f.lo], { radius: 10, renderer: canv, f: f, z: z, stroke: false, fill: false });
+      mk.on('click', function (e) {
+        L.DomEvent.stop(e);
+        if (pendingEta) { setEtaTarget({ la: f.la, lo: f.lo, st: f.n }); return; }
+        L.popup({ offset: [0, -8], maxWidth: 280 }).setLatLng([f.la, f.lo]).setContent(
+          '<div class="vs-pop"><b>' + esc(f.n) + '</b> <span>' + esc(f.kind) + '</span><br>' + esc(f.ph) +
+          (f.f ? ' · ' + esc(f.f) : '') + (f.op ? '<br><span>' + esc(f.op) + '</span>' : '') + (f.wd ? '<br><span>Water depth ' + esc(f.wd) + ' m</span>' : '') +
+          '<br><span>Source: Sodir FactPages</span></div>').openOn(map);
+      });
+      gFixed.addLayer(mk);
+    });
   }
 
   // ---------- stations ----------
