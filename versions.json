@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 20,
+   "current": 21,
    "versions": [
     {
      "v": 1,
@@ -182,6 +182,15 @@
      "note": "Vessels v1.16: Fixed Offshore Installations layer (Sodir, 121 surface installations, ED50→WGS84): platforms dark blue / black (shut down, partly removed, abandoned) / outline (being installed), FPSO/FSU as hull with derrick, Hywind Tampen turbines red; names from zoom 9; tap for details; usable as ETA target. Hidden when the installation transmits AIS under its own name within 2 km (fresh ≤30 min). AIS rigs now a dark red platform symbol (grey when stale). Requires AIS Worker 1.10 (/fixed.json).",
      "bytes": 4514993,
      "sha": "ba3ff66ad339788dfbfdbd4f9cc05de4594eb9171fb63a563c76103dba0d2d27"
+    },
+    {
+     "v": 21,
+     "label": "1.21",
+     "file": "index.v21.html",
+     "archived": "2026-11-05",
+     "note": "LOOME Night Ops v1.9: the moon card now shows the moon's azimuth (true bearing, °T) and elevation (refraction-corrected, signed, with 'Below horizon' when negative) for the selected date and time. Sun and moon curve, twilight bands and moonlight calculation unchanged. TAF unchanged (v1.27), Vessels unchanged (v1.16).",
+     "bytes": 4515609,
+     "sha": "73cf4353f62567cabd8c7353442b2d0a69f92ee6ef3a9a5f9530e58eabeb3c82"
     }
    ]
   }
