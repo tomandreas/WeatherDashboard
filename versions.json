@@ -6,52 +6,57 @@
     {
      "v": 1,
      "label": "1.1",
-     "file": "index.v1.html",
+     "file": "versions/index.v1.html",
      "archived": "2026-10-21",
      "note": "First release: TAF Timeline v1.25 (left, 66 %) and LOOME Night Ops v1.7 (right, 34 %) merged into one page, each scoped to its own pane; tabs below 1100 px; installable and offline; WeatherDashboard icon.",
      "bytes": 4421437,
-     "sha": "43621f2f6c7a0e383873fd4ad15fc6437bde2c72f071f2e42282865abf85051a"
+     "sha": "43621f2f6c7a0e383873fd4ad15fc6437bde2c72f071f2e42282865abf85051a",
+     "missing": true
     },
     {
      "v": 2,
      "label": "1.2",
-     "file": "index.v2.html",
+     "file": "versions/index.v2.html",
      "archived": "2026-10-23",
      "note": "LOOME side updated to v1.8 (nearest large or medium airport within 10 NM names the place). TAF unchanged (v1.25).",
      "bytes": 4422233,
-     "sha": "1815c6adbe25728ad3796d951013f61d2c2ae726f54927a377fdb961a5bbfc5a"
+     "sha": "1815c6adbe25728ad3796d951013f61d2c2ae726f54927a377fdb961a5bbfc5a",
+     "missing": true
     },
     {
      "v": 3,
      "label": "1.3",
-     "file": "index.v3.html",
+     "file": "versions/index.v3.html",
      "archived": "2026-10-23",
      "note": "Top bar with a light/dark switch (opens in dark, remembers the choice); high-legibility light theme for both sides; TAF airport cards always one per row. TAF v1.25 and LOOME v1.8 unchanged.",
      "bytes": 4433346,
-     "sha": "bb0cff74988d2f91638943ab5dc5ab2ba826a9dfc97c728b2430182120255266"
+     "sha": "bb0cff74988d2f91638943ab5dc5ab2ba826a9dfc97c728b2430182120255266",
+     "missing": true
     },
     {
      "v": 4,
      "label": "1.4",
-     "file": "index.v4.html",
+     "file": "versions/index.v4.html",
      "archived": "2026-10-25",
      "note": "New Vessels section (v1.0): search the curated vessel list by name or MMSI, view photos from the ais-photos repo, and upload new photos (resized on the device, credit required, shared upload code) via /api/vessel-photo. Own tab below 1100 px, below the TAF timeline on wide screens. TAF v1.25 and LOOME v1.8 unchanged.",
      "bytes": 4448824,
-     "sha": "2e4cfb1b1970f7a4fe9176bb4eea3830ae5f7729915bebf662b4fe74733cca54"
+     "sha": "2e4cfb1b1970f7a4fe9176bb4eea3830ae5f7729915bebf662b4fe74733cca54",
+     "missing": true
     },
     {
      "v": 5,
      "label": "1.5",
-     "file": "index.v5.html",
+     "file": "versions/index.v5.html",
      "archived": "2026-10-26",
      "note": "Light theme: petrol accent (#27535C) replaces brown across TAF, LOOME and Vessels (titles, labels, selected mode, AIP warning); amber fills unchanged. Selected mode frame follows the switch's rounded corners (both themes). Vessels v1.1: space below the section, search field scrolls to the top when used, full-screen photo viewer (wheel/pinch zoom, drag, double-click/tap reset, Esc/✕ to close).",
      "bytes": 4454241,
-     "sha": "f1ca145c2c3ae48ef3cfc9c191c8fa982a4818aebad6db60a5110795b4649603"
+     "sha": "f1ca145c2c3ae48ef3cfc9c191c8fa982a4818aebad6db60a5110795b4649603",
+     "missing": true
     },
     {
      "v": 6,
      "label": "1.6",
-     "file": "index.v6.html",
+     "file": "versions/index.v6.html",
      "archived": "2026-10-26",
      "note": "Version number in the header (LOOME footer line removed). TAF Timeline v1.26: Edit aerodromes has ✕ to remove (with Undo) and the add/search field. Vessels v1.2: MMSI required only for vessels without one, Find MMSI from AIS with picker, MMSI format check (2–7 + 8 digits), hard stop on name/MMSI mismatch with Use AIS name, Upload anyway when MMSI not in AIS, no duplicate MMSIs, Add as separate / Go to existing for same name, vessel type in results. Requires api/vessel-photo.js v1.1.",
      "bytes": 4459829,
@@ -60,7 +65,7 @@
     {
      "v": 7,
      "label": "1.7",
-     "file": "index.v7.html",
+     "file": "versions/index.v7.html",
      "archived": "2026-10-27",
      "note": "Vessels v1.3: live traffic map (OpenStreetMap + OpenSeaMap, coloured ship icons rotated to course, grey 5 px vectors and turn curves, layer panel with categories and overlays, tap a vessel for details and photos). Vessel card shows position age, SOG/COG, destination and ETA, plus a mini-map that expands to the full map. Wide screens: Vessels is full width below TAF and LOOME (the page scrolls down to it); phones keep the Vessels tab, with the map opening full screen. Requires AIS Worker 1.5 (/live.json).",
      "bytes": 4478956,
@@ -69,16 +74,17 @@
     {
      "v": 8,
      "label": "1.8",
-     "file": "index.v8.html",
+     "file": "versions/index.v8.html",
      "archived": "2026-10-27",
      "note": "Vessels v1.4: opening a vessel in the search (tap, or Enter with one match) centres the live map on it, rings it and opens its info box (full-screen map on phones). Vessels without an MMSI are looked up by exact name in AIS for position and map focus. Info box restyled (dark, readable; light theme supported). Requires AIS Worker 1.7 (/live.json?name=).",
      "bytes": 4481798,
-     "sha": "e3851e7e625afefcddc6fdf1d5c645dd91caf527a549cc8867c4075267a5a651"
+     "sha": "e3851e7e625afefcddc6fdf1d5c645dd91caf527a549cc8867c4075267a5a651",
+     "missing": true
     },
     {
      "v": 9,
      "label": "1.9",
-     "file": "index.v9.html",
+     "file": "versions/index.v9.html",
      "archived": "2026-10-27",
      "note": "Wide screens scroll as one page (fixes iPad scrolling). 'Vessels ↓' button next to the flight-rules switch. Vessels v1.5: heading 'Vessel Information'; map refresh every 30 s; ship icons drawn on canvas from zoom 7; vessel names + speed from zoom 9 (switchable); 2 px vectors; Stations layer (dark blue stars with names); ETA to point (dynamic line + ETA label, kept until removed); station ETA for tankers, rigs and heavy-lift (Mongstad → Holmengrå, Sture → Fedje vest, else nearest); Save MMSI for listed vessels found by name in AIS. Requires api/vessel-photo.js with the setMmsi action.",
      "bytes": 4493030,
@@ -87,7 +93,7 @@
     {
      "v": 10,
      "label": "1.10",
-     "file": "index.v10.html",
+     "file": "versions/index.v10.html",
      "archived": "2026-10-27",
      "note": "Vessels v1.6: all vessel ETAs (ETA to point, station ETA, AIS ETA) in Norwegian local time, e.g. 15:42 LT, with automatic summer/winter time. Destination → station also by UN/LOCODE: NO MON / Mongstad → Holmengrå, NO STU / Sture → Fedje vest, NO KAR / Kårstø → Skudefjorden, NO MLK / Melkøya → Fruholmen (spaces, hyphens and case ignored).",
      "bytes": 4494474,
@@ -96,7 +102,7 @@
     {
      "v": 11,
      "label": "1.11",
-     "file": "index.v11.html",
+     "file": "versions/index.v11.html",
      "archived": "2026-10-28",
      "note": "Vessels v1.7: on phones the search no longer opens the map full screen (the card stays, the map below centres on the vessel); full screen only via Expand or the ⤢ button in the map header. Inline map on phones lets one finger scroll the page (pan in full screen). Info box → list also finds listed vessels without MMSI. Esc cancels a pending ETA point. Bug sweep: phone, iPad portrait/landscape and PC, light and dark.",
      "bytes": 4495640,
@@ -105,7 +111,7 @@
     {
      "v": 12,
      "label": "1.12",
-     "file": "index.v12.html",
+     "file": "versions/index.v12.html",
      "archived": "2026-10-28",
      "note": "Vessels v1.8: Aircraft (SAR) layer on the map (MMSI 111…, helicopter symbol rotated to track, name/speed/altitude, no vectors; dashboard only, never ForeFlight). Station pairing reads FROM>TO (also =>, ->, ' - '): arrival port wins, then departure; label says 'to …' or 'from …'. Wide screens: 'Vessel Information' aligned with 'Live Traffic'. Upload hint text updated. Requires AIS Worker 1.8 (&air=1).",
      "bytes": 4497515,
@@ -114,16 +120,17 @@
     {
      "v": 13,
      "label": "1.13",
-     "file": "index.v13.html",
+     "file": "versions/index.v13.html",
      "archived": "2026-10-28",
      "note": "Vessels v1.9: one finger pans the map again on phones (inline and full screen); phone page ends at the map's bottom edge (no empty space below); choosing a vessel in the search hides the other results, with '← All results (n)' to go back; new helicopter symbol (navy, white halo, nose on track); ETA to point also for aircraft.",
      "bytes": 4498859,
-     "sha": "f7812491dc16ae3a10f658e669e1fa48ab9429eacd77cb921a00e7a0d699df12"
+     "sha": "f7812491dc16ae3a10f658e669e1fa48ab9429eacd77cb921a00e7a0d699df12",
+     "missing": true
     },
     {
      "v": 14,
      "label": "1.14",
-     "file": "index.v14.html",
+     "file": "versions/index.v14.html",
      "archived": "2026-11-02",
      "note": "Vessels v1.10: breadcrumbs for the selected target only — one grey 3 px dot per 2 minutes for the last 60 minutes, fading to ~25 % for the oldest, gaps where there are no reports; refreshed every 30 s; removed when the info box closes (which now also clears the selection ring). Requires AIS Worker 1.9 (/track.json).",
      "bytes": 4500722,
@@ -132,7 +139,7 @@
     {
      "v": 15,
      "label": "1.15",
-     "file": "index.v15.html",
+     "file": "versions/index.v15.html",
      "archived": "2026-11-02",
      "note": "Vessels v1.11: map memory reduced to stop iOS reloading the page on big zooms — one shared canvas for symbols, vectors and breadcrumbs with 15 % margin (was a new canvas per redraw, 30 %); tiles: keepBuffer 1, no loading during zoom; seamarks off by default on phones (choice remembered). Measured at iPhone size, full screen, 6 zoom steps: canvas peak 33 → 7 MB, tiles held 42 → 21.",
      "bytes": 4501217,
@@ -141,16 +148,17 @@
     {
      "v": 16,
      "label": "1.16",
-     "file": "index.v16.html",
+     "file": "versions/index.v16.html",
      "archived": "2026-11-02",
      "note": "Vessels v1.12: aircraft breadcrumbs (MMSI 111…) one dot every 30 s for the last 45 min (±15 s tolerance, gaps where no report); vessels unchanged (2 min / 60 min).",
      "bytes": 4501485,
-     "sha": "3524c3541d2fd36aa09bb97994fb145eb01d23d2fb877db3ebe69a104201dcfb"
+     "sha": "3524c3541d2fd36aa09bb97994fb145eb01d23d2fb877db3ebe69a104201dcfb",
+     "missing": true
     },
     {
      "v": 17,
      "label": "1.17",
-     "file": "index.v17.html",
+     "file": "versions/index.v17.html",
      "archived": "2026-11-02",
      "note": "Vessels v1.13: bug fix — after using ETA to point, targets could no longer be selected (the ETA line created a second map canvas on top that swallowed taps; regression from 1.15). Everything is now drawn on the one shared canvas.",
      "bytes": 4501665,
@@ -159,7 +167,7 @@
     {
      "v": 18,
      "label": "1.18",
-     "file": "index.v18.html",
+     "file": "versions/index.v18.html",
      "archived": "2026-11-03",
      "note": "Vessels v1.14: selection persists after closing the info box (ring + breadcrumbs keep updating); tap the selected target again to deselect (double taps within 0.4 s ignored); collapsing the card in the list deselects. ETA to point: tap a station (exact station position), a vessel/aircraft (intercept: line to the meeting point, faint line for the target's movement, 'No intercept at current speed' when unsolvable), or open sea. Stations are tappable only while placing an ETA point; the selection does not change while placing.",
      "bytes": 4505112,
@@ -168,7 +176,7 @@
     {
      "v": 19,
      "label": "1.19",
-     "file": "index.v19.html",
+     "file": "versions/index.v19.html",
      "archived": "2026-11-03",
      "note": "Vessels v1.15: bug fix — an ETA/intercept from an aircraft showed 'position not available' after zooming so the aircraft left the view (the out-of-view lookup did not ask the Worker for aircraft). Lookup now includes aircraft, and the last known position of every ETA vessel/target is kept so labels never blank during a zoom or pan.",
      "bytes": 4505349,
@@ -177,7 +185,7 @@
     {
      "v": 20,
      "label": "1.20",
-     "file": "index.v20.html",
+     "file": "versions/index.v20.html",
      "archived": "2026-11-04",
      "note": "Vessels v1.16: Fixed Offshore Installations layer (Sodir, 121 surface installations, ED50→WGS84): platforms dark blue / black (shut down, partly removed, abandoned) / outline (being installed), FPSO/FSU as hull with derrick, Hywind Tampen turbines red; names from zoom 9; tap for details; usable as ETA target. Hidden when the installation transmits AIS under its own name within 2 km (fresh ≤30 min). AIS rigs now a dark red platform symbol (grey when stale). Requires AIS Worker 1.10 (/fixed.json).",
      "bytes": 4514993,
@@ -186,7 +194,7 @@
     {
      "v": 21,
      "label": "1.21",
-     "file": "index.v21.html",
+     "file": "versions/index.v21.html",
      "archived": "2026-11-05",
      "note": "LOOME Night Ops v1.9: the moon card now shows the moon's azimuth (true bearing, °T) and elevation (refraction-corrected, signed, with 'Below horizon' when negative) for the selected date and time. Sun and moon curve, twilight bands and moonlight calculation unchanged. TAF unchanged (v1.27), Vessels unchanged (v1.16).",
      "bytes": 4515609,
