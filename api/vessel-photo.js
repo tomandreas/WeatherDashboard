@@ -2,6 +2,7 @@
 //   POST JSON { code, name, mmsi?, listName?, photographer, consent: true, force?, separate?, image: <base64 JPEG> }
 //        → { ok, mmsi, name, file, credit }
 //        409 { error, code: 'name_mismatch' | 'not_in_ais' | 'name_exists' | 'mmsi_required', ... } — checks the user must resolve
+//   POST JSON { code, action: 'setMmsi', name, mmsi } → { ok } — link a listed vessel without MMSI to its AIS MMSI
 //   GET ?find=NAME   → { candidates: [{ mmsi, name, type, lastSeen }] } from current AIS data
 //   GET ?types=1     → { types: { mmsi: 'Tanker' | ... } } for the vessels in vessels.json
 // The photo is saved as <MMSI>-<n>.jpg (next free number) and added to photos.json and vessels.json.
@@ -110,6 +111,20 @@ export default async function handler(req, res) {
   try {
     const b = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     if (String(b.code || '') !== process.env.UPLOAD_CODE) return res.status(403).json({ error: 'Wrong upload code' });
+    if (b.action === 'setMmsi') {
+      const nm = norm(b.name), mm = String(b.mmsi || '').trim();
+      if (!VALID_MMSI.test(mm)) return res.status(400).json({ error: 'MMSI must be 9 digits starting with 2–7' });
+      const hit = (await ais()).find(r => r.mmsi === mm);
+      if (!hit) return res.status(400).json({ error: 'MMSI ' + mm + ' is not in the current AIS data' });
+      if (hit.name !== nm) return res.status(400).json({ error: 'MMSI ' + mm + ' is "' + hit.name + '" in AIS, not "' + nm + '"' });
+      await updateJson('vessels.json', [], d => {
+        if (d.some(x => String(x.mmsi) === mm)) throw new Error('MMSI ' + mm + ' is already in the vessel list');
+        const v = d.find(x => !x.mmsi && norm(x.name) === nm);
+        if (!v) throw new Error(nm + ' (without MMSI) not found in the vessel list');
+        v.mmsi = mm; return d;
+      }, 'vessels.json: MMSI ' + mm + ' for ' + nm);
+      return res.status(200).json({ ok: true, mmsi: mm, name: nm });
+    }
     if (b.consent !== true) return res.status(400).json({ error: 'Permission to share must be confirmed' });
     const photographer = String(b.photographer || '').replace(/\s+/g, ' ').trim().slice(0, 80);
     if (!photographer) return res.status(400).json({ error: 'Name of photographer is required' });

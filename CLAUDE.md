@@ -34,19 +34,23 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 |---|---|---|
 | Cloudflare Worker (AIS → KML/JSON) | `worker.js` → Cloudflare Workers, `foreflight-ais.tom-ostrem-airlift-github.workers.dev` (Workers Paid) | **1.10** |
 | ForeFlight content pack | `AIS_Foreflight_Layer.zip` (manifest, `layers/*.kmz`, `navdata/Read me - AIS layer.pdf`) | **1.6** |
-| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `index.vNN.html`) | **1.21** (TAF Timeline v1.27, LOOME Night Ops v1.9, Vessels v1.16) |
+| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.21** (TAF Timeline v1.27, LOOME Night Ops v1.9, Vessels v1.16) |
 | Vessel photo upload API | `api/vessel-photo.js` (Vercel function) | v1.1 + `setMmsi` action |
 | Admin tool | `admin.html` + `api/vessel-admin.js` (Vercel) | 1.0 |
+| Service worker | `sw.js` | Network-first offline cache of the page, `minima.js`, manifest and icons; never caches `api/` |
+| PWA manifest | `manifest.json` | Installable app (name "WeatherDashboard", standalone, dark theme colour) |
+| Approach minima data | `minima.js` | Generated from the minima workbook (AIRAC 2026-09-03: ILS/LPV/LOC/LNAV/VOR, MSA, RVR by DH and approach lights). Replace the file for each AIRAC update |
+| TAF/METAR proxy | `api/wx.js` | Vercel function proxying raw TAF/METAR (aviationweather.gov and MET Norway); needs Vercel env var `MET_USER_AGENT` |
 | Photo repo | GitHub `tomandreas/ais-photos` → `https://tomandreas.github.io/ais-photos/` (`photos.json`, `vessels.json`, `MMSI-n.jpg`) | — |
 | LOOME Night Ops stand-alone | GitHub repo `tomandreas/LOOME` (`index.html`, `sw.js`, `manifest.json`, `versions.json`, icons; same LOOME code as the dashboard pane, own page) | **1.9** |
 | LOOME Night Ops in the AW169 calculator (Norway edition) | `sun-moon.html` in GitHub repo `tomandreas/Airlift-AW169Calculator` (public; Claude can read it, only Tom can push). Norway-only gazetteer, `← Tools` back link, own icons, map limited to Norway, no service worker | **1.9** (updated 2026-11-06) |
-| Legend PDF generator | `tools/pdf/build_legend_pdf.py` (ReportLab, icons in `tools/pack/icons/`) | PDF v1.6 |
+| Legend PDF generator | `tools/pdf/build_legend_pdf.py` (ReportLab, icons in `tools/pack/icons/`) — **not in this repo** (no `tools/` folder here; kept with Tom) | PDF v1.6 |
 
 ## Tom's GitHub repositories (all public, `github.com/tomandreas/<name>`)
 Claude can read every one of them (git clone works); Claude cannot push to any. Tom commits and pushes the files Claude delivers.
 | Repo | What it is |
 |---|---|
-| `WeatherDashboard` | Weather dashboard → Vercel `wxdashboard.vercel.app`: TAF Timeline + LOOME + Vessels, `admin.html`, `api/*.js`, `versions.json`, `index.vNN.html` |
+| `WeatherDashboard` | Weather dashboard → Vercel `wxdashboard.vercel.app`: TAF Timeline + LOOME + Vessels, `admin.html`, `api/*.js`, `versions.json`, `versions/index.vNN.html` |
 | `LOOME` | Stand-alone LOOME Night Ops (sun, twilight, moonlight; installable with `sw.js`) |
 | `WxWindow` | Stand-alone TAF Timeline **v1.27** (`wxwindow.vercel.app`; has `minima.js`, `versions/`, `api/`) |
 | `Airlift-AW169Calculator` | AW169 tools site: payload calculator, ferry planner, limitations, operations, performance, `sun-moon.html` (LOOME Norway edition), opening-hours workflow |
@@ -99,7 +103,7 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 - Theme: dark default; light theme uses petrol accent #27535C. Version shown in header ("v1.21"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
 
 ## TO-DO for next build
-(empty — built 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
+(empty — built 2026-11-11: `api/vessel-photo.js` replaced with the content of the root `vessel-photo.js`, which restores the `setMmsi` action (Save MMSI); dashboard stays 1.21, `index.html` unchanged; CLAUDE.md component list and paths corrected. Earlier build 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
 
 ## Decisions (rejected / settled — do not re-propose)
 - ICAO location indicator on fixed installations (ForeFlight, dashboard info card, AIS info box, Worker `/fixed.json`, PDF): dropped by Tom, 2026-11-04. `data/icao_by_installation.json` is kept for reference only.
@@ -114,6 +118,7 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 - Version harmonization (2026-11-06): `versions/` folder + root `versions.json` in every repo; a version log that had ended up in the LOOME repo was moved to the calculator repo.
 
 ## Known items / on hold
+- Stray `vessel-photo.js` in the repo root (10,623 B) was the version with `setMmsi`; since 2026-11-11 `api/vessel-photo.js` has the same content and the root file is a redundant duplicate. Vercel serves only `api/`. Tom removes it with `git rm vessel-photo.js`; until then do not edit it.
 - Point 5 (disable zoom animation on phones) — on hold unless iOS reloads persist.
 - LOOME internal scroll restore doesn't apply on wide screens (single page scroll) — accepted.
 - The calculator's `versions.json` is stale for every page except `sun-moon.html` (last entries 2026-09-30; their archive copies exist in no repo). Re-log them when those pages are next changed.
