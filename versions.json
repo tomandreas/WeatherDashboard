@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 21,
+   "current": 22,
    "versions": [
     {
      "v": 1,
@@ -199,6 +199,15 @@
      "note": "LOOME Night Ops v1.9: the moon card now shows the moon's azimuth (true bearing, °T) and elevation (refraction-corrected, signed, with 'Below horizon' when negative) for the selected date and time. Sun and moon curve, twilight bands and moonlight calculation unchanged. TAF unchanged (v1.27), Vessels unchanged (v1.16).",
      "bytes": 4515609,
      "sha": "73cf4353f62567cabd8c7353442b2d0a69f92ee6ef3a9a5f9530e58eabeb3c82"
+    },
+    {
+     "v": 22,
+     "label": "1.22",
+     "file": "versions/index.v22.html",
+     "archived": "2026-11-15",
+     "note": "Vessels v1.17: new station Grip Ytre (63°15.0'N 007°35.9'E, 63.25 / 7.5983) added last in the station list; no terminal rule, so it is used as the nearest station only (vessels between Ona Pilotboarding and Kristiansund now show Grip Ytre). TAF unchanged (v1.27), LOOME unchanged (v1.9).",
+     "bytes": 4515652,
+     "sha": "5ecfd90d0cbf8c6a000ba00b56abe03719a4ba08f375ac7991ab2565af48738f"
     }
    ]
   }

@@ -34,7 +34,7 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 |---|---|---|
 | Cloudflare Worker (AIS → KML/JSON) | `worker.js` → Cloudflare Workers, `foreflight-ais.tom-ostrem-airlift-github.workers.dev` (Workers Paid) | **1.10** |
 | ForeFlight content pack | `AIS_Foreflight_Layer.zip` (manifest, `layers/*.kmz`, `navdata/Read me - AIS layer.pdf`) | **1.6** |
-| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.21** (TAF Timeline v1.27, LOOME Night Ops v1.9, Vessels v1.16) |
+| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.22** (TAF Timeline v1.27, LOOME Night Ops v1.9, Vessels v1.17) |
 | Vessel photo upload API | `api/vessel-photo.js` (Vercel function) | v1.1 + `setMmsi` action |
 | Admin tool | `admin.html` + `api/vessel-admin.js` (Vercel) | 1.0 |
 | Service worker | `sw.js` | Network-first offline cache of the page, `minima.js`, manifest and icons; never caches `api/` |
@@ -88,7 +88,7 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 - Filters: MMSI 111… (SAR aircraft) **never in ForeFlight**; on dashboard only with `&air=1`. `HIDE_MMSI` hides vessels. SOG ≥102.2 kt = not available. Stale >30 min grey, removed >180 min.
 - Photos: `photos.json` re-read every 2 min.
 
-## WeatherDashboard Vessels (v1.16) — behaviour to preserve
+## WeatherDashboard Vessels (v1.17) — behaviour to preserve
 - Wide screens (≥1100 px): one page scroll; TAF + LOOME side by side, Vessel Information full width below ("Vessel Information" heading aligned with "Live Traffic"). Phones: Vessels tab. "VESSELS ↓" button next to IFR/VFR switch.
 - Search: choosing a vessel shows it alone ("← All results (n)"); card shows position age, SOG/COG, destination, ETA (LT), station ETA, mini-map (⤢ Expand), photos, upload. Save MMSI for listed vessels without MMSI (upload code).
 - Upload checks: MMSI required only if vessel has none; Find MMSI (AIS lookup + picker); format `^[2-7]\d{8}$`; name≠AIS → hard stop ("Use AIS name"); MMSI not in AIS → "Upload anyway"; no duplicate MMSI; same name/different MMSI → "Add as separate"/"Go to existing".
@@ -98,12 +98,12 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 - Breadcrumbs (selected target only): grey 3 px dots, no line, fade to 25 %; vessels 1 dot / 2 min for 60 min (±60 s); aircraft 1 dot / 30 s for 45 min (±15 s); gaps where no report.
 - ETA to point: target = open sea, station, fixed installation, or vessel/aircraft (**intercept**: earliest meeting point, A at own speed, B constant course/speed; "No intercept at current speed"; A <0.5 kt → no ETA). Dashed line + label (LT), persisted in localStorage `ves.eta`, ✕ removes, Esc cancels.
 - All ETAs in Norwegian local time "15:42 LT" (Europe/Oslo, DST automatic).
-- Stations (dark blue stars, names): Holmengrå 60.85/4.4316, Fedje vest 60.7667/4.465, Skudefjorden 59.033/5.167, Crew Change Bergen 60.22883/4.51117, Ona Pilotboarding 62.933/6.45, Fruholmen 71.092/23.45, Crew Change Hammerfest 71.1505/23.07967.
+- Stations (dark blue stars, names): Holmengrå 60.85/4.4316, Fedje vest 60.7667/4.465, Skudefjorden 59.033/5.167, Crew Change Bergen 60.22883/4.51117, Ona Pilotboarding 62.933/6.45, Fruholmen 71.092/23.45, Crew Change Hammerfest 71.1505/23.07967, Grip Ytre 63.25/7.5983 (63°15.0'N 007°35.9'E, added 2026-11-15; last in the list because terminal rules refer to stations by position).
 - Station ETA for tankers, rigs, heavy-lift: destination FROM>TO (separators `=>`,`->`,`>`,` - `), arrival port wins, then departure: Mongstad/NO MON → Holmengrå; Sture/NO STU → Fedje vest; Kårstø/NO KAR → Skudefjorden; Melkøya/NO MLK → Fruholmen; else nearest. Label "(to X)"/"(from X)".
-- Theme: dark default; light theme uses petrol accent #27535C. Version shown in header ("v1.21"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
+- Theme: dark default; light theme uses petrol accent #27535C. Version shown in header ("v1.22"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
 
 ## TO-DO for next build
-(empty — built 2026-11-11: `api/vessel-photo.js` replaced with the content of the root `vessel-photo.js`, which restores the `setMmsi` action (Save MMSI); dashboard stays 1.21, `index.html` unchanged; CLAUDE.md component list and paths corrected. Earlier build 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
+(empty — built 2026-11-15: Dashboard 1.22 / Vessels v1.17: new station Grip Ytre (63.25 / 7.5983), nearest-station logic only. Earlier build 2026-11-11: `api/vessel-photo.js` replaced with the content of the root `vessel-photo.js`, which restores the `setMmsi` action (Save MMSI); dashboard stays 1.21, `index.html` unchanged; CLAUDE.md component list and paths corrected. Earlier build 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
 
 ## Decisions (rejected / settled — do not re-propose)
 - ICAO location indicator on fixed installations (ForeFlight, dashboard info card, AIS info box, Worker `/fixed.json`, PDF): dropped by Tom, 2026-11-04. `data/icao_by_installation.json` is kept for reference only.
@@ -116,6 +116,8 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 - WxWindow (stand-alone TAF Timeline, `wxwindow.vercel.app`, linked from the calculator) is kept in step with the dashboard TAF Timeline by hand: v1.27 on 2026-11-06. Dashboard-only theming (`__wdC`, `COLORS` proxy, `__wdTaf`) is not ported. Every future TAF change must be applied to both.
 - Calculator ops hours (`data/ops_hours.json`, `scripts/`, `.github/workflows/`) is left untouched by every build (Tom, 2026-11-06).
 - Version harmonization (2026-11-06): `versions/` folder + root `versions.json` in every repo; a version log that had ended up in the LOOME repo was moved to the calculator repo.
+
+- Station Grip Ytre (Tom, 2026-11-15): added as a normal station with **no terminal-to-station rule**; it is used only as the nearest station. Do not add a rule unless Tom names a terminal.
 
 ## Known items / on hold
 - Stray `vessel-photo.js` in the repo root (10,623 B) was the version with `setMmsi`; since 2026-11-11 `api/vessel-photo.js` has the same content and the root file is a redundant duplicate. Vercel serves only `api/`. Tom removes it with `git rm vessel-photo.js`; until then do not edit it.
