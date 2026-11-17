@@ -2,7 +2,7 @@
 
 Repo `tomandreas/WeatherDashboard` → Vercel `wxdashboard.vercel.app` (local clone `C:\Users\tom_o\Documents\Repos\WeatherDashboard`). One page with three apps: **TAF Timeline**, **LOOME Night Ops**, **Vessels** (AIS map). Read this file first in every session; it wins over `..\CLAUDE.md` (Repos root, general rules) if they conflict.
 
-The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack, symbology, Fixed Offshore Installations source data) is **not in this repo**; its notes are in `C:\Users\tom_o\Documents\Repos\ChatGPT\claude\CLAUDE.md`. This repo's dashboard depends on the Worker's endpoints (listed below).
+The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack, symbology, Fixed Offshore Installations source data) is **not in this repo**; its notes are in `C:\Users\tom_o\Documents\Repos\CentralMemories\SHARED_TECHNICAL_KNOWLEDGE.md` (ST-07; full original in `CentralMemories\archive\ChatGPT-claude__CLAUDE.md`); the source is in `ChatGPT\current\` and `ChatGPT\build\` (copy in `CentralMemories\workers\foreflight-ais\`). This repo's dashboard depends on the Worker's endpoints (listed below).
 
 ## Working rules (from Tom — always follow)
 1. **Never build until Tom says "build"** (or "bygg"); this includes bug fixes (diagnose, propose, wait). Collect requests in the to-do list meanwhile.
@@ -13,7 +13,7 @@ The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack,
 6. **Language: always answer in English, even when Tom writes Norwegian.** Short answers: result or to-do list first, then unintended consequences.
 7. Layer use is **by agreement with Tom A. Østrem only**; no price anywhere in docs.
 8. Test every build (see Testing) at phone, iPad portrait/landscape and PC, light + dark theme.
-9. **Where files go.** Write build files straight into this clone (`Documents\Repos\WeatherDashboard`). Tom commits, pushes and deploys himself. Never write scratch files into his folders; never overwrite a file Tom may have edited since you read it (check, re-read if changed). `ChatGPT\claude` is only for Claude memories, never for app builds.
+9. **Where files go.** Write build files straight into this clone (`Documents\Repos\WeatherDashboard`). If this session can push, Claude commits and pushes (never secrets); otherwise Tom does. Tom deploys himself. Never write scratch files into his folders; never overwrite a file Tom may have edited since you read it (check, re-read if changed). Claude memories go only in `CentralMemories` (`ChatGPT\claude` is frozen), never in an app repo.
 10. **Workflow:** before changing anything list every file you need and read them in one pass; then make all edits; then run the tests once (again only after fixing a failure).
 11. **At the end of each build update this file** (versions, to-do list, decisions) and bump `page-version`, the header version, the title tooltip, `versions.json` and the archive copy.
 12. **Commands for Tom:** every PowerShell block starts with `cd C:\Users\tom_o\Documents\Repos\WeatherDashboard`; one command per line; no `&&`; say explicitly what to copy, test, deploy, commit and push, and whether any SQL or migration is needed (none for this repo so far).
@@ -46,21 +46,13 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 | LOOME Night Ops in the AW169 calculator (Norway edition) | `sun-moon.html` in GitHub repo `tomandreas/Airlift-AW169Calculator` (public; Claude can read it, only Tom can push). Norway-only gazetteer, `← Tools` back link, own icons, map limited to Norway, no service worker | **1.9** (updated 2026-11-06) |
 | Legend PDF generator | `tools/pdf/build_legend_pdf.py` (ReportLab, icons in `tools/pack/icons/`) — **not in this repo** (no `tools/` folder here; kept with Tom) | PDF v1.6 |
 
-## Tom's GitHub repositories (all public, `github.com/tomandreas/<name>`)
-Claude can read every one of them (git clone works); Claude cannot push to any. Tom commits and pushes the files Claude delivers.
-| Repo | What it is |
-|---|---|
-| `WeatherDashboard` | Weather dashboard → Vercel `wxdashboard.vercel.app`: TAF Timeline + LOOME + Vessels, `admin.html`, `api/*.js`, `versions.json`, `versions/index.vNN.html` |
-| `LOOME` | Stand-alone LOOME Night Ops (sun, twilight, moonlight; installable with `sw.js`) |
-| `WxWindow` | Stand-alone TAF Timeline **v1.27** (`wxwindow.vercel.app`; has `minima.js`, `versions/`, `api/`) |
-| `Airlift-AW169Calculator` | AW169 tools site: payload calculator, ferry planner, limitations, operations, performance, `sun-moon.html` (LOOME Norway edition), opening-hours workflow |
-| `ais-photos` | Vessel photos for the AIS layer and dashboard (`photos.json`, `vessels.json`, `MMSI-n.jpg`); GitHub Pages |
-| `FSPlanning` | Static web app mapping every handcrafted airport in MSFS 2024 (has its own README) |
-| `H145TrainingPrep` | "H145 Sim Eval Prep" (single `index.html`) |
+## Tom's GitHub repositories
+
+The full list of Tom's repositories (17 on GitHub on 2026-11-17, public and private, with status and local clone) is kept in `CentralMemories\PROJECT_REGISTRY.md` (created at the first CentralMemories commit; until then use `..\STATUS.md`). Repos this dashboard depends on: `LOOME`, `WxWindow`, `Airlift-AW169Calculator`, `ais-photos` (GitHub Pages). Not all repos are public.
 
 Local clones: `C:\Users\tom_o\Documents\Repos\<repo>` (git installed, global name/email set; clone of ais-photos intentionally not made). Before copying files in and pushing, always `git pull` first — the calculator repo has a nightly bot (02:15 UTC, `data/ops_hours.json`) that commits on its own; `ais-photos` receives uploads directly.
 
-Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight pack. The private memory repo for Claude files is `github.com/tomandreas/ChatGPT` (local clone `C:\Users\tom_o\Documents\Repos\ChatGPT`); it holds only Claude context and memories, in its `claude\` folder, and this `CLAUDE.md` is there. No app builds in it.
+Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their source is in the private repo `github.com/tomandreas/ChatGPT` (`current\`, `build\`; local clone `C:\Users\tom_o\Documents\Repos\ChatGPT`), with a copy in `CentralMemories\workers\foreflight-ais\` since 2026-11-17. Claude memories and shared knowledge live in `CentralMemories` (`ChatGPT\claude\` is frozen).
 
 ## Versioning convention (same in every repo — Tom decided 2026-11-06)
 - Each repo has a `versions.json` in its root (multi-file format: `files → "<page>.html" → {current, versions:[{v, label, file, archived, note, bytes, sha}]}`; `v` is the sequential log number used in the archive name, `label` is the human version such as 1.21; an entry whose archive copy does not exist anywhere carries `"missing": true`; an optional top-level `_note` explains the log) and a **`versions/`** folder with the archive copies, named `<page>.v<NN>.html` (e.g. `versions/index.v21.html`, `versions/ferry.v6.html`). Nothing reads these files at runtime; they are our change log and rollback copies.
@@ -76,7 +68,7 @@ Not in any of these repos (kept with Tom): Worker `worker.js` and the ForeFlight
 1. Worker first (`wrangler deploy`) when the dashboard depends on new endpoints.
 2. Dashboard (`index.html` + `index.vNN.html` + `versions.json`, and any `api/*.js`) → push to WeatherDashboard (Vercel auto-deploys).
 3. ForeFlight pack only when layers/icons/PDF change → Tom imports `AIS_Foreflight_Layer.zip` on the iPads.
-4. After each build Tom commits and pushes the target repo (always `git pull` first). He pushes the private `ChatGPT` repo only when `CLAUDE.md` or other memories changed, which is normally at the end of a build since `CLAUDE.md` is updated then.
+4. After each build Tom commits and pushes the target repo (always `git pull` first). Memories and notes are committed to `CentralMemories` at the end of a build; `ChatGPT` only when the Worker source changed.
 
 ## Worker 1.10 — endpoints
 - `/` KML for ForeFlight: params `bbox`, `types`, `vec`, `shape`, `maxage`, `mapheading`. Layers in the pack: AIS South (56–65.5N, 0–13E), AIS North (65–82N, 4–35E), AIS Tankers and Rigs (56–82N, 0–35E, types tanker,rig,heavylift).
