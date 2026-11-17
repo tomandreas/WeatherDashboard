@@ -122,7 +122,7 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - TAF bell (Tom, 2026-11-17): a NEW separate Worker `taf-alerts` (not inside `foreflight-ais`, to keep the SAR layer safe); any later TAF issue counts as new (amendments and corrections too); TAF only; one notification per tap; dashboard only (WxWindow is another site and would need its own subscription).
 
 ## Known items / on hold
-- TAF bell delivery to a real iPhone/iPad (APNs) is UNVERIFIED until Tom tests it from the home-screen app; the Worker's encryption is tested against an independent receiver and the flow against mocks only. `taf-alerts` deploy is Tom's step (the device shell cannot reach api.cloudflare.com).
+- TAF bell: Tom confirmed on his iPhone (home-screen app) on 2026-11-17 that it works (bell armed through the live `taf-alerts` Worker, waiting for the next TAF). Android/desktop untested. `taf-alerts` deploy is Tom's step (the device shell cannot reach api.cloudflare.com).
 - Stray `vessel-photo.js` in the repo root (10,623 B) was the version with `setMmsi`; since 2026-11-11 `api/vessel-photo.js` has the same content and the root file is a redundant duplicate. Vercel serves only `api/`. Tom removes it with `git rm vessel-photo.js`; until then do not edit it.
 - Point 5 (disable zoom animation on phones) — on hold unless iOS reloads persist.
 - LOOME internal scroll restore doesn't apply on wide screens (single page scroll) — accepted.
