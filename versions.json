@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 24,
+   "current": 25,
    "versions": [
     {
      "v": 1,
@@ -226,6 +226,15 @@
      "note": "Frosted-glass design on the header, phone tabs, TAF Timeline and Vessels (approved mockup); map overlays (Layers, ship pop-up, ETA labels) use the stronger Frosted tint; small tap animations (button ripple and press, bell swing when armed, springy theme switch, sliding tab indicator, slider thumb and time tick, card open slide-in, Layers pop-in, layer checkbox pop, pop-up rise-in), all off under reduced motion. LOOME pane unchanged (v1.9), TAF logic unchanged (v1.28), Vessels logic unchanged (v1.17). Everything is gated by data-wd-style=\"glass\" on <html>: remove that attribute to roll back to the 1.23 look.",
      "bytes": 4539218,
      "sha": "ffdff4f0027670583762a25fbe37bd15801c389da50505aa4eed26ac5dc864a2"
+    },
+    {
+     "v": 25,
+     "label": "1.25",
+     "file": "versions/index.v25.html",
+     "archived": "2026-11-17",
+     "note": "Glass fixes: summary rows are no longer see-through, so the red swipe-to-remove button behind each row stops showing at its right end; the warm background glows (amber in dark, petrol in light, green at the bottom) are removed, leaving only a faint cool blue glow on the right. TAF v1.28, LOOME v1.9, Vessels v1.17 unchanged. Rollback switch unchanged (data-wd-style=\"glass\" on <html>).",
+     "bytes": 4539216,
+     "sha": "cca8674516bf8f4fc9d340477f6f3853d860ae609142237bbfe2c4dec2977b1d"
     }
    ]
   }
