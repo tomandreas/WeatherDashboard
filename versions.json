@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 22,
+   "current": 23,
    "versions": [
     {
      "v": 1,
@@ -208,6 +208,15 @@
      "note": "Vessels v1.17: new station Grip Ytre (63°15.0'N 007°35.9'E, 63.25 / 7.5983) added last in the station list; no terminal rule, so it is used as the nearest station only (vessels between Ona Pilotboarding and Kristiansund now show Grip Ytre). TAF unchanged (v1.27), LOOME unchanged (v1.9).",
      "bytes": 4515652,
      "sha": "5ecfd90d0cbf8c6a000ba00b56abe03719a4ba08f375ac7991ab2565af48738f"
+    },
+    {
+     "v": 23,
+     "label": "1.23",
+     "file": "versions/index.v23.html",
+     "archived": "2026-11-17",
+     "note": "TAF Timeline v1.28: flight time starts at 1:00 and counts as set (set departure or ETA, the other is calculated); departure, flight time and ETA are saved on the device and restored, and everything resets (blank departure/ETA, 1:00) when the departure time has passed or on Clear. New bell on each TAF line: one push notification for the next new TAF (any new issue, amendment or correction), then back to an outline; needs the new Worker taf-alerts 1.0 (deploy it first) and the home-screen app; sw.js shows the push. LOOME unchanged (v1.9), Vessels unchanged (v1.17).",
+     "bytes": 4521558,
+     "sha": "584f8776412398d6a90145e022356e907a791cdfbe618558c35d84d01c0cda26"
     }
    ]
   }

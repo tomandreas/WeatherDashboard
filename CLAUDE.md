@@ -34,10 +34,11 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 |---|---|---|
 | Cloudflare Worker (AIS → KML/JSON) | `worker.js` → Cloudflare Workers, `foreflight-ais.tom-ostrem-airlift-github.workers.dev` (Workers Paid) | **1.10** |
 | ForeFlight content pack | `AIS_Foreflight_Layer.zip` (manifest, `layers/*.kmz`, `navdata/Read me - AIS layer.pdf`) | **1.6** |
-| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.22** (TAF Timeline v1.27, LOOME Night Ops v1.9, Vessels v1.17) |
+| WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.23** (TAF Timeline v1.28, LOOME Night Ops v1.9, Vessels v1.17) |
 | Vessel photo upload API | `api/vessel-photo.js` (Vercel function) | v1.1 + `setMmsi` action |
 | Admin tool | `admin.html` + `api/vessel-admin.js` (Vercel) | 1.0 |
-| Service worker | `sw.js` | Network-first offline cache of the page, `minima.js`, manifest and icons; never caches `api/` |
+| TAF bell Worker | `CentralMemories\workers\taf-alerts\` (`worker.js`, `wrangler.toml`, `make-vapid.mjs`, `test.mjs`, `README.md`) → Cloudflare Worker `taf-alerts.tom-ostrem-airlift-github.workers.dev` (KV `ALERTS`, cron every 2 min). Deployed with `npx wrangler deploy` from that folder | **1.0** (built 2026-11-17, deploy pending) |
+| Service worker | `sw.js` | Network-first offline cache of the page, `minima.js`, manifest and icons; never caches `api/`. Since 1.23 also `push` and `notificationclick` handlers for the TAF bell |
 | PWA manifest | `manifest.json` | Installable app (name "WeatherDashboard", standalone, dark theme colour) |
 | Approach minima data | `minima.js` | Generated from the minima workbook (AIRAC 2026-09-03: ILS/LPV/LOC/LNAV/VOR, MSA, RVR by DH and approach lights). Replace the file for each AIRAC update |
 | TAF/METAR proxy | `api/wx.js` | Vercel function proxying raw TAF/METAR (aviationweather.gov and MET Norway); needs Vercel env var `MET_USER_AGENT` |
@@ -62,9 +63,11 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 
 ### Secrets (names only — values are with Tom)
 - Cloudflare Worker: `BW_CLIENT_ID`, `BW_CLIENT_SECRET` (BarentsWatch client `tom.ostrem@airlift.no:foreflight-ais`, scope `ais`), optional `RIG_MMSI`, `ROT_MIN` (default 5 °/min), `HIDE_MMSI`, `PHOTOS_URL`, `DASHBOARD_ORIGINS` (default `https://wxdashboard.vercel.app`).
+- Cloudflare Worker `taf-alerts`: secrets `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` (made by `make-vapid.mjs`, piped straight into `wrangler secret put`, never shown or pasted in chat); vars in its `wrangler.toml`: `VAPID_SUBJECT`, `ALLOWED_ORIGINS`, `MET_USER_AGENT`.
 - Vercel: `GITHUB_TOKEN` (fine-grained, ais-photos Contents R/W), `UPLOAD_CODE`, `ADMIN_CODE`, optional `PHOTOS_REPO`.
 
 ### Deploy order (always)
+0. `taf-alerts` Worker (only when it changed or is new): `npx wrangler deploy` from `CentralMemories\workers\taf-alerts`; it must be live before a dashboard that has the TAF bell.
 1. Worker first (Cloudflare dashboard: Workers & Pages > foreflight-ais > Edit code > paste `worker.js` > Deploy (all deployments so far are "Manually deployed", source Dashboard, verified by Tom 2026-11-17)) when the dashboard depends on new endpoints. Roll back under Deployments in the same Worker. No `wrangler.toml` exists.
 2. Dashboard (`index.html` + `index.vNN.html` + `versions.json`, and any `api/*.js`) → push to WeatherDashboard (Vercel auto-deploys).
 3. ForeFlight pack only when layers/icons/PDF change → Tom imports `AIS_Foreflight_Layer.zip` on the iPads.
@@ -94,12 +97,12 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - Station ETA for tankers, rigs, heavy-lift: destination FROM>TO (separators `=>`,`->`,`>`,` - `), arrival port wins, then departure: Mongstad/NO MON → Holmengrå; Sture/NO STU → Fedje vest; Kårstø/NO KAR → Skudefjorden; Melkøya/NO MLK → Fruholmen; else nearest. Label "(to X)"/"(from X)".
 - Theme: dark default; light theme uses petrol accent #27535C. Version shown in header ("v1.22"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
 
-## TO-DO for next build
-Decided by Tom 2026-11-17 (waits for his "build"):
-1. TAF Timeline flight sliders: flight time defaults to 1:00 and counts as set; departure, flight time and ETA persist per device (localStorage) and reset to blank departure/ETA + 1:00 when the departure time has passed (replaces the "slide departure forward to now" behaviour); Clear also returns to 1:00. Apply the same to WxWindow (TAF ripple rule).
-2. TAF bell (dashboard only, not WxWindow): per-airport bell on the TAF card, outline = off, solid = armed; ONE push notification when a newer TAF (any new issue, including AMD/COR) than the one current at tap time appears, then it returns to outline; tap a solid bell to cancel; TAF only, never METAR. Needs a NEW separate Cloudflare Worker `taf-alerts` (cron every 2 min, one batched TAF request, Web Push via WebCrypto reusing Losliste `src/edge/webpush.ts`, own VAPID secrets, CORS to the dashboard only), plus push and notificationclick handlers in `sw.js`. Not inside `foreflight-ais`. iOS works only from the home-screen app; permission asked on first bell tap; delivery to a real iPhone is untested until Tom checks it.
+## TAF Timeline v1.28 — behaviour to preserve
+- Flight sliders: flight time starts at 1:00 and counts as set; set departure OR ETA and the other is calculated (ETA first: departure = ETA − flight time, never before now). Departure, flight time and ETA are saved per device in `taft.flight` (only when departure and ETA are both set) and restored on load if the departure is still in the future. When the departure time has passed (checked every 30 s and on return to the app) or on Clear: blank departure/ETA, flight time 1:00, saved state removed. A changed flight time alone is not saved. Same code in WxWindow (v1.28).
+- TAF bell (dashboard only): one bell on the TAF line of each card with a TAF. Outline = off, solid amber = armed. Tap: asks notification permission (first time), subscribes, tells the `taf-alerts` Worker, which remembers the TAF issue time that is current. One push when a TAF with a LATER issue time appears (new issue, amendment or correction), then the alert is deleted and the bell returns to an outline (server is the truth; the page syncs via `/status` on start and on return, and the service worker messages an open page when the push arrives). Tap a solid bell: cancels. TAF only, never METAR. Without push support (a Safari tab on iOS) the tap shows "Notifications only work in the app added to the Home Screen". Worker source of truth: `CentralMemories\workers\taf-alerts\`.
 
-Earlier builds: built 2026-11-15: Dashboard 1.22 / Vessels v1.17: new station Grip Ytre (63.25 / 7.5983), nearest-station logic only. Earlier build 2026-11-11: `api/vessel-photo.js` replaced with the content of the root `vessel-photo.js`, which restores the `setMmsi` action (Save MMSI); dashboard stays 1.21, `index.html` unchanged; CLAUDE.md component list and paths corrected. Earlier build 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
+## TO-DO for next build
+(empty — built 2026-11-17: Dashboard 1.23 / TAF Timeline v1.28 (flight sliders 1:00 default, persistent, reset when the departure passes; TAF bell), WxWindow 1.28 (sliders), new Worker `taf-alerts` 1.0, `sw.js` push handlers. Earlier build 2026-11-15: Dashboard 1.22 / Vessels v1.17: new station Grip Ytre (63.25 / 7.5983), nearest-station logic only. Earlier build 2026-11-11: `api/vessel-photo.js` replaced with the content of the root `vessel-photo.js`, which restores the `setMmsi` action (Save MMSI); dashboard stays 1.21, `index.html` unchanged; CLAUDE.md component list and paths corrected. Earlier build 2026-11-06: WxWindow TAF Timeline v1.27 (aligned with the dashboard); calculator `sun-moon.html` LOOME 1.9; version history harmonized in all repos; deliveries are in each repo's local clone under `Repos\`)
 
 ## Decisions (rejected / settled — do not re-propose)
 - ICAO location indicator on fixed installations (ForeFlight, dashboard info card, AIS info box, Worker `/fixed.json`, PDF): dropped by Tom, 2026-11-04. `data/icao_by_installation.json` is kept for reference only.
@@ -109,13 +112,17 @@ Earlier builds: built 2026-11-15: Dashboard 1.22 / Vessels v1.17: new station Gr
 - There are **three** LOOME copies: dashboard pane, stand-alone, and the AW169 calculator (`sun-moon.html`). Apply every LOOME change to all three.
 - The stand-alone LOOME and the dashboard LOOME share the same code and version number (airport naming from v1.8: a large/medium airport within 10 NM names the place). Apply every LOOME change to both.
 
-- WxWindow (stand-alone TAF Timeline, `wxwindow.vercel.app`, linked from the calculator) is kept in step with the dashboard TAF Timeline by hand: v1.27 on 2026-11-06. Dashboard-only theming (`__wdC`, `COLORS` proxy, `__wdTaf`) is not ported. Every future TAF change must be applied to both.
+- WxWindow (stand-alone TAF Timeline, `wxwindow.vercel.app`, linked from the calculator) is kept in step with the dashboard TAF Timeline by hand: v1.27 on 2026-11-06, v1.28 on 2026-11-17 (flight sliders; the TAF bell is dashboard-only, Tom 2026-11-17). Dashboard-only theming (`__wdC`, `COLORS` proxy, `__wdTaf`) is not ported. Every future TAF change must be applied to both.
 - Calculator ops hours (`data/ops_hours.json`, `scripts/`, `.github/workflows/`) is left untouched by every build (Tom, 2026-11-06).
 - Version harmonization (2026-11-06): `versions/` folder + root `versions.json` in every repo; a version log that had ended up in the LOOME repo was moved to the calculator repo.
 
 - Station Grip Ytre (Tom, 2026-11-15): added as a normal station with **no terminal-to-station rule**; it is used only as the nearest station. Do not add a rule unless Tom names a terminal.
 
+- TAF flight sliders (Tom, 2026-11-17): flight time defaults to 1:00; the saved flight times are cleared when the DEPARTURE time passes (not when the ETA passes); Clear also returns to 1:00.
+- TAF bell (Tom, 2026-11-17): a NEW separate Worker `taf-alerts` (not inside `foreflight-ais`, to keep the SAR layer safe); any later TAF issue counts as new (amendments and corrections too); TAF only; one notification per tap; dashboard only (WxWindow is another site and would need its own subscription).
+
 ## Known items / on hold
+- TAF bell delivery to a real iPhone/iPad (APNs) is UNVERIFIED until Tom tests it from the home-screen app; the Worker's encryption is tested against an independent receiver and the flow against mocks only. `taf-alerts` deploy is Tom's step (the device shell cannot reach api.cloudflare.com).
 - Stray `vessel-photo.js` in the repo root (10,623 B) was the version with `setMmsi`; since 2026-11-11 `api/vessel-photo.js` has the same content and the root file is a redundant duplicate. Vercel serves only `api/`. Tom removes it with `git rm vessel-photo.js`; until then do not edit it.
 - Point 5 (disable zoom animation on phones) — on hold unless iOS reloads persist.
 - LOOME internal scroll restore doesn't apply on wide screens (single page scroll) — accepted.
