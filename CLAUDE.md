@@ -144,4 +144,6 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - Photos: 63 vessels+ in ais-photos; credits shown under each image.
 
 ## Testing
+Testing on Legion without Playwright (used for 1.24/1.25, 2026-11-17): Playwright is not installed there. Serve the clone with `python -m http.server 8765 --bind 127.0.0.1` (background), open `http://127.0.0.1:8765/index.html` in the Claude browser pane, add a few aerodromes and press "Load sample" (`#demoBtn`) for TAF data, then use viewport presets (375, 768, 1180, 1366) and the theme switch. Expected console errors there: 404 for `api/` (Vercel functions) and CORS from the Worker (it only answers the dashboard origin), so Vessels shows no ships locally. Stop the server afterwards.
+
 The Playwright scripts used so far (`sweep.py` full regression across 5 viewports/themes, `seltest.py` selection/ETA, `zoometa.py` out-of-view ETA, `leak2.py` canvas/tile memory) are **not in this repo** (kept with Tom from the original handover). If they are missing, write fresh Playwright checks that mock the Worker/GitHub; with the device shell, also test against the live Worker.
