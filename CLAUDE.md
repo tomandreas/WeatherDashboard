@@ -122,6 +122,7 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - TAF bell (Tom, 2026-11-17): a NEW separate Worker `taf-alerts` (not inside `foreflight-ais`, to keep the SAR layer safe); any later TAF issue counts as new (amendments and corrections too); TAF only; one notification per tap; dashboard only (WxWindow is another site and would need its own subscription).
 
 ## Known items / on hold
+- Frosted-glass mockup (Tom asked 2026-11-17): private claude.ai page https://claude.ai/artifact/DMPZmqTXbBrZoKEG2YvTiE (example data; TAF cards, LOOME card, Vessels map with layers/info box, Glass/Frosted/Solid switch for map overlays, tap animations: ripple, bell swing, spring theme switch, sliding tabs, layers pop-in, checkbox pop). Not in the app; source kept only in that page. Awaiting Tom's verdict. The parked floating-glass decision for LOOME still stands until Tom lifts it.
 - TAF bell: Tom confirmed on his iPhone (home-screen app) on 2026-11-17 that it works (bell armed through the live `taf-alerts` Worker, waiting for the next TAF). Android/desktop untested. `taf-alerts` deploy is Tom's step (the device shell cannot reach api.cloudflare.com).
 - Point 5 (disable zoom animation on phones) — on hold unless iOS reloads persist.
 - LOOME internal scroll restore doesn't apply on wide screens (single page scroll) — accepted.
