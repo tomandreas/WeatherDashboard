@@ -1,7 +1,7 @@
 {
  "files": {
   "index.html": {
-   "current": 23,
+   "current": 24,
    "versions": [
     {
      "v": 1,
@@ -217,6 +217,15 @@
      "note": "TAF Timeline v1.28: flight time starts at 1:00 and counts as set (set departure or ETA, the other is calculated); departure, flight time and ETA are saved on the device and restored, and everything resets (blank departure/ETA, 1:00) when the departure time has passed or on Clear. New bell on each TAF line: one push notification for the next new TAF (any new issue, amendment or correction), then back to an outline; needs the new Worker taf-alerts 1.0 (deploy it first) and the home-screen app; sw.js shows the push. LOOME unchanged (v1.9), Vessels unchanged (v1.17).",
      "bytes": 4521558,
      "sha": "584f8776412398d6a90145e022356e907a791cdfbe618558c35d84d01c0cda26"
+    },
+    {
+     "v": 24,
+     "label": "1.24",
+     "file": "versions/index.v24.html",
+     "archived": "2026-11-17",
+     "note": "Frosted-glass design on the header, phone tabs, TAF Timeline and Vessels (approved mockup); map overlays (Layers, ship pop-up, ETA labels) use the stronger Frosted tint; small tap animations (button ripple and press, bell swing when armed, springy theme switch, sliding tab indicator, slider thumb and time tick, card open slide-in, Layers pop-in, layer checkbox pop, pop-up rise-in), all off under reduced motion. LOOME pane unchanged (v1.9), TAF logic unchanged (v1.28), Vessels logic unchanged (v1.17). Everything is gated by data-wd-style=\"glass\" on <html>: remove that attribute to roll back to the 1.23 look.",
+     "bytes": 4539218,
+     "sha": "ffdff4f0027670583762a25fbe37bd15801c389da50505aa4eed26ac5dc864a2"
     }
    ]
   }
