@@ -65,7 +65,7 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - Vercel: `GITHUB_TOKEN` (fine-grained, ais-photos Contents R/W), `UPLOAD_CODE`, `ADMIN_CODE`, optional `PHOTOS_REPO`.
 
 ### Deploy order (always)
-1. Worker first (`wrangler deploy`) when the dashboard depends on new endpoints.
+1. Worker first (Cloudflare dashboard: Workers & Pages > foreflight-ais > Edit code > paste `worker.js` > Deploy (all deployments so far are "Manually deployed", source Dashboard, verified by Tom 2026-11-17)) when the dashboard depends on new endpoints. Roll back under Deployments in the same Worker. No `wrangler.toml` exists.
 2. Dashboard (`index.html` + `index.vNN.html` + `versions.json`, and any `api/*.js`) → push to WeatherDashboard (Vercel auto-deploys).
 3. ForeFlight pack only when layers/icons/PDF change → Tom imports `AIS_Foreflight_Layer.zip` on the iPads.
 4. After each build Tom commits and pushes the target repo (always `git pull` first). Memories and notes are committed to `CentralMemories` at the end of a build; `ChatGPT` only when the Worker source changed.
