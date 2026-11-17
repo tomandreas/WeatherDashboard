@@ -1,6 +1,6 @@
 # CLAUDE.md – WeatherDashboard (Tom A. Østrem)
 
-Repo `tomandreas/WeatherDashboard` → Vercel `wxdashboard.vercel.app` (local clone `C:\Users\tom_o\Documents\Repos\WeatherDashboard`). One page with three apps: **TAF Timeline**, **LOOME Night Ops**, **Vessels** (AIS map). Read this file first in every session; it wins over `..\CLAUDE.md` (Repos root, general rules) if they conflict.
+Repo `tomandreas/WeatherDashboard` → Vercel `wxdashboard.vercel.app` (local clone `C:\Users\tom_o\Documents\Repos\WeatherDashboard`). One page with three apps: **TAF Timeline**, **LOOME Night Ops**, **Vessels** (AIS map). Read this file first in every session; it wins over the general rules (`CentralMemories\GENERAL_RULES.md`, cross-app status in `CentralMemories\STATUS.md`; on Tom's PCs also loaded through the `Repos\CLAUDE.md` stub) if they conflict. Cloud sessions (claude.ai/code) have no Repos folder: attach the GitHub repo `tomandreas/CentralMemory` and read those files from it.
 
 The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack, symbology, Fixed Offshore Installations source data) is **not in this repo**; its notes are in `C:\Users\tom_o\Documents\Repos\CentralMemories\SHARED_TECHNICAL_KNOWLEDGE.md` (ST-07; full original in `CentralMemories\archive\ChatGPT-claude__CLAUDE.md`); the source is in `ChatGPT\current\` and `ChatGPT\build\` (copy in `CentralMemories\workers\foreflight-ais\`). This repo's dashboard depends on the Worker's endpoints (listed below).
 
@@ -13,7 +13,7 @@ The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack,
 6. **Language: always answer in English, even when Tom writes Norwegian.** Short answers: result or to-do list first, then unintended consequences.
 7. Layer use is **by agreement with Tom A. Østrem only**; no price anywhere in docs.
 8. Test every build (see Testing) at phone, iPad portrait/landscape and PC, light + dark theme.
-9. **Where files go.** Write build files straight into this clone (`Documents\Repos\WeatherDashboard`). If this session can push, Claude commits and pushes (never secrets); otherwise Tom does. Tom deploys himself. Never write scratch files into his folders; never overwrite a file Tom may have edited since you read it (check, re-read if changed). Claude memories go only in `CentralMemories` (`ChatGPT\claude` is frozen), never in an app repo.
+9. **Where files go.** Write build files straight into this clone (`Documents\Repos\WeatherDashboard`). If this session can push, Claude commits and pushes (never secrets); otherwise Tom does. Deploys: Vercel deploys the dashboard on push; `taf-alerts` is deployed with `npx wrangler deploy` (Claude Code on Tom's PC may run it as part of a build; cloud sessions cannot reach api.cloudflare.com, so then it is Tom's step); `foreflight-ais` is always pasted by Tom in the Cloudflare dashboard. Never write scratch files into his folders; never overwrite a file Tom may have edited since you read it (check, re-read if changed). Claude memories go only in `CentralMemories` (`ChatGPT\claude` is frozen), never in an app repo.
 10. **Workflow:** before changing anything list every file you need and read them in one pass; then make all edits; then run the tests once (again only after fixing a failure).
 11. **At the end of each build update this file** (versions, to-do list, decisions) and bump `page-version`, the header version, the title tooltip, `versions.json` and the archive copy.
 12. **Commands for Tom:** every PowerShell block starts with `cd C:\Users\tom_o\Documents\Repos\WeatherDashboard`; one command per line; no `&&`; say explicitly what to copy, test, deploy, commit and push, and whether any SQL or migration is needed (none for this repo so far).
@@ -37,7 +37,7 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 | WeatherDashboard | GitHub repo `WeatherDashboard` → Vercel `wxdashboard.vercel.app` (`index.html`, `versions.json`, `versions/index.vNN.html`) | **1.23** (TAF Timeline v1.28, LOOME Night Ops v1.9, Vessels v1.17) |
 | Vessel photo upload API | `api/vessel-photo.js` (Vercel function) | v1.1 + `setMmsi` action |
 | Admin tool | `admin.html` + `api/vessel-admin.js` (Vercel) | 1.0 |
-| TAF bell Worker | `CentralMemories\workers\taf-alerts\` (`worker.js`, `wrangler.toml`, `make-vapid.mjs`, `test.mjs`, `README.md`) → Cloudflare Worker `taf-alerts.tom-ostrem-airlift-github.workers.dev` (KV `ALERTS`, cron every 2 min). Deployed with `npx wrangler deploy` from that folder | **1.0** (built 2026-11-17, deploy pending) |
+| TAF bell Worker | `CentralMemories\workers\taf-alerts\` (`worker.js`, `wrangler.toml`, `make-vapid.mjs`, `test.mjs`, `README.md`) → Cloudflare Worker `taf-alerts.tom-ostrem-airlift-github.workers.dev` (KV `ALERTS`, cron every 2 min). Deployed with `npx wrangler deploy` from that folder | **1.0** (built and deployed 2026-11-17) |
 | Service worker | `sw.js` | Network-first offline cache of the page, `minima.js`, manifest and icons; never caches `api/`. Since 1.23 also `push` and `notificationclick` handlers for the TAF bell |
 | PWA manifest | `manifest.json` | Installable app (name "WeatherDashboard", standalone, dark theme colour) |
 | Approach minima data | `minima.js` | Generated from the minima workbook (AIRAC 2026-09-03: ILS/LPV/LOC/LNAV/VOR, MSA, RVR by DH and approach lights). Replace the file for each AIRAC update |
@@ -49,7 +49,7 @@ Vercel deploys automatically. If the Worker changed, deploy it first (see Deploy
 
 ## Tom's GitHub repositories
 
-The full list of Tom's repositories (17 on GitHub on 2026-11-17, public and private, with status and local clone) is kept in `CentralMemories\PROJECT_REGISTRY.md` (created at the first CentralMemories commit; until then use `..\STATUS.md`). Repos this dashboard depends on: `LOOME`, `WxWindow`, `Airlift-AW169Calculator`, `ais-photos` (GitHub Pages). Not all repos are public.
+The full list of Tom's repositories (public and private, with status and local clone; 15 on GitHub after two were deleted on 2026-11-17) is kept in `CentralMemories\PROJECT_REGISTRY.md`; cross-app status in `CentralMemories\STATUS.md`. Repos this dashboard depends on: `LOOME`, `WxWindow`, `Airlift-AW169Calculator`, `ais-photos` (GitHub Pages). Not all repos are public.
 
 Local clones: `C:\Users\tom_o\Documents\Repos\<repo>` (git installed, global name/email set; clone of ais-photos intentionally not made). Before copying files in and pushing, always `git pull` first — the calculator repo has a nightly bot (02:15 UTC, `data/ops_hours.json`) that commits on its own; `ais-photos` receives uploads directly.
 
@@ -58,8 +58,8 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 ## Versioning convention (same in every repo — Tom decided 2026-11-06)
 - Each repo has a `versions.json` in its root (multi-file format: `files → "<page>.html" → {current, versions:[{v, label, file, archived, note, bytes, sha}]}`; `v` is the sequential log number used in the archive name, `label` is the human version such as 1.21; an entry whose archive copy does not exist anywhere carries `"missing": true`; an optional top-level `_note` explains the log) and a **`versions/`** folder with the archive copies, named `<page>.v<NN>.html` (e.g. `versions/index.v21.html`, `versions/ferry.v6.html`). Nothing reads these files at runtime; they are our change log and rollback copies.
 - The live file always keeps its normal name (`index.html`, `sun-moon.html`, …). The repo root holds only live files, `versions.json` and the `versions/` folder.
-- **Every delivery** into this clone `Repos\<repo>\` contains: the new live file (overwriting the previous one), its own copy as `versions/<page>.v<NN>.html`, the previous live file archived as `versions/<page>.v<NN-1>.html` if it is not already there (for a repo's first delivery take it from the repo itself), and the updated `versions.json`. Tom reviews, commits and pushes from that clone.
-- Claude cannot push to GitHub, and cannot rename or delete files in the repos. Moves and deletions are given to Tom as `git mv` / `git rm` commands.
+- **Every delivery** into this clone `Repos\<repo>\` contains: the new live file (overwriting the previous one), its own copy as `versions/<page>.v<NN>.html`, the previous live file archived as `versions/<page>.v<NN-1>.html` if it is not already there (for a repo's first delivery take it from the repo itself), and the updated `versions.json`. Committed and pushed per rule 9 (Claude when the session can push, otherwise Tom).
+- Moves and deletions are done with `git mv` / `git rm`: Claude runs them when the session can push, otherwise they are given to Tom as commands.
 
 ### Secrets (names only — values are with Tom)
 - Cloudflare Worker: `BW_CLIENT_ID`, `BW_CLIENT_SECRET` (BarentsWatch client `tom.ostrem@airlift.no:foreflight-ais`, scope `ais`), optional `RIG_MMSI`, `ROT_MIN` (default 5 °/min), `HIDE_MMSI`, `PHOTOS_URL`, `DASHBOARD_ORIGINS` (default `https://wxdashboard.vercel.app`).
@@ -95,7 +95,7 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 - All ETAs in Norwegian local time "15:42 LT" (Europe/Oslo, DST automatic).
 - Stations (dark blue stars, names): Holmengrå 60.85/4.4316, Fedje vest 60.7667/4.465, Skudefjorden 59.033/5.167, Crew Change Bergen 60.22883/4.51117, Ona Pilotboarding 62.933/6.45, Fruholmen 71.092/23.45, Crew Change Hammerfest 71.1505/23.07967, Grip Ytre 63.25/7.5983 (63°15.0'N 007°35.9'E, added 2026-11-15; last in the list because terminal rules refer to stations by position).
 - Station ETA for tankers, rigs, heavy-lift: destination FROM>TO (separators `=>`,`->`,`>`,` - `), arrival port wins, then departure: Mongstad/NO MON → Holmengrå; Sture/NO STU → Fedje vest; Kårstø/NO KAR → Skudefjorden; Melkøya/NO MLK → Fruholmen; else nearest. Label "(to X)"/"(from X)".
-- Theme: dark default; light theme uses petrol accent #27535C. Version shown in header ("v1.22"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
+- Theme: dark default; light theme uses petrol accent #27535C. Version shown in header (now "v1.23"); bump `page-version`, header, title tooltip, `versions.json` (+ `index.vNN.html`) each build.
 
 ## TAF Timeline v1.28 — behaviour to preserve
 - Flight sliders: flight time starts at 1:00 and counts as set; set departure OR ETA and the other is calculated (ETA first: departure = ETA − flight time, never before now). Departure, flight time and ETA are saved per device in `taft.flight` (only when departure and ETA are both set) and restored on load if the departure is still in the future. When the departure time has passed (checked every 30 s and on return to the app) or on Clear: blank departure/ETA, flight time 1:00, saved state removed. A changed flight time alone is not saved. Same code in WxWindow (v1.28).
@@ -123,7 +123,6 @@ Not in any of these repos: Worker `worker.js` and the ForeFlight pack. Their sou
 
 ## Known items / on hold
 - TAF bell: Tom confirmed on his iPhone (home-screen app) on 2026-11-17 that it works (bell armed through the live `taf-alerts` Worker, waiting for the next TAF). Android/desktop untested. `taf-alerts` deploy is Tom's step (the device shell cannot reach api.cloudflare.com).
-- Stray `vessel-photo.js` in the repo root (10,623 B) was the version with `setMmsi`; since 2026-11-11 `api/vessel-photo.js` has the same content and the root file is a redundant duplicate. Vercel serves only `api/`. Tom removes it with `git rm vessel-photo.js`; until then do not edit it.
 - Point 5 (disable zoom animation on phones) — on hold unless iOS reloads persist.
 - LOOME internal scroll restore doesn't apply on wide screens (single page scroll) — accepted.
 - The calculator's `versions.json` is stale for every page except `sun-moon.html` (last entries 2026-09-30; their archive copies exist in no repo). Re-log them when those pages are next changed.
