@@ -17,6 +17,7 @@ The ForeFlight AIS layer itself (Cloudflare Worker `worker.js`, ForeFlight pack,
 10. **Workflow:** before changing anything list every file you need and read them in one pass; then make all edits; then run the tests once (again only after fixing a failure).
 11. **At the end of each build update this file** (versions, to-do list, decisions) and bump `page-version`, the header version, the title tooltip, `versions.json` and the archive copy.
 12. **Commands for Tom:** every PowerShell block starts with `cd C:\Users\tom_o\Documents\Repos\WeatherDashboard`; one command per line; no `&&`; say explicitly what to copy, test, deploy, commit and push, and whether any SQL or migration is needed (none for this repo so far).
+13. **Two repos, one session each.** The Worker and ForeFlight pack are in `Repos\foreflight-ais` (own `CLAUDE.md`). If a change touches the Worker or its endpoints, say so and stop: Tom runs a separate session in `foreflight-ais`, and the Worker is deployed before the dashboard.
 
 ## Pushing a build (Tom)
 Files are already in the clone, so after a build:
